@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+  const PW = "masimowinsall";
+  const KEY = "mwins_auth";
+  function showLock(){
+    document.documentElement.style.overflow="hidden";
+    const overlay = document.createElement("div");
+    overlay.id="pw-overlay";
+    overlay.style.cssText="position:fixed;inset:0;background:#14172a;display:flex;align-items:center;justify-content:center;z-index:99999;font-family:Inter,sans-serif;";
+    overlay.innerHTML=`<div style="background:#1e2235;border:1px solid #2d3452;border-radius:16px;padding:40px 48px;text-align:center;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+      <div style="width:52px;height:52px;background:#3b5bdb;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+        <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M12 1a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2h-2V6a5 5 0 0 0-5-5zm0 2a3 3 0 0 1 3 3v3H9V6a3 3 0 0 1 3-3zm0 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
+      </div>
+      <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;">Masimo ROI Analyzer</div>
+      <div style="font-size:12px;color:#8892ac;margin-bottom:28px;">Enter password to continue</div>
+      <input id="pw-input" type="password" placeholder="Password" style="width:100%;padding:12px 16px;border:1.5px solid #2d3452;border-radius:8px;background:#14172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box;margin-bottom:12px;" />
+      <div id="pw-error" style="color:#fa5252;font-size:12px;margin-bottom:10px;min-height:16px;"></div>
+      <button id="pw-btn" style="width:100%;padding:12px;background:#3b5bdb;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Unlock</button>
+    </div>`;
+    document.body.appendChild(overlay);
+    document.getElementById("pw-input").focus();
+    function tryUnlock(){
+      const val = document.getElementById("pw-input").value;
+      if(val === PW){
+        sessionStorage.setItem(KEY,"1");
+        overlay.remove();
+        document.documentElement.style.overflow="";
+      } else {
+        document.getElementById("pw-error").textContent="Incorrect password. Try again.";
+        document.getElementById("pw-input").value="";
+        document.getElementById("pw-input").focus();
+      }
+    }
+    document.getElementById("pw-btn").onclick = tryUnlock;
+    document.getElementById("pw-input").onkeydown = function(e){ if(e.key==="Enter") tryUnlock(); };
+  }
+  if(sessionStorage.getItem(KEY)!=="1"){
+    document.addEventListener("DOMContentLoaded", showLock);
+  }
+})();
+</script>
+<title>Masimo · ROI Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f1f5; --white:#fff; --s1:#f8f9fb; --s2:#eef0f5;
+  --border:#dde0ea; --border2:#c8ccd8;
+  --text:#1a1d2e; --text2:#4a5070; --text3:#8890b0;
+  --accent:#c92a2a;
+  --green:#16a34a; --green-l:#dcfce7; --green-b:#86efac;
+  --amber:#b45309; --amber-l:#fef3c7; --amber-b:#fde68a;
+  --red:#dc2626;   --red-l:#fee2e2;   --red-b:#fca5a5;
+  --blue:#1d4ed8;
+  --mono:'JetBrains Mono',monospace; --sans:'Sora',sans-serif;
+  --sh:0 1px 4px rgba(0,0,0,.07); --sh2:0 4px 18px rgba(0,0,0,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;font-size:14px;}
+
+.header{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--sh);}
+.hd-logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#c92a2a,#7f1d1d);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 2px 8px rgba(201,42,42,.2);}
+.hd-left{display:flex;align-items:center;gap:12px;}
+.hd-title{font-size:14px;font-weight:700;}
+.hd-sub{font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:1px;}
+.hd-badge{background:#fff0f0;color:var(--accent);border:1px solid #fcc;border-radius:5px;padding:3px 10px;font-size:10px;font-weight:700;font-family:var(--mono);}
+.lang-toggle{display:flex;gap:2px;background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:2px;margin-left:4px;}
+.lang-btn{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:var(--mono);transition:all .15s;}
+.lang-btn.active{background:var(--text);color:white;}
+.cur-btn{padding:4px 12px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:var(--mono);transition:all .15s;}
+.cur-btn.active{background:var(--accent);color:white;}
+
+.wrap{max-width:1200px;margin:0 auto;padding:24px 24px 80px;}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:var(--sh);}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.sec-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:var(--mono);flex-shrink:0;}
+.sec-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);}
+
+/* PASTE */
+.paste-card{background:var(--white);border:1px solid var(--amber-b);border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:var(--sh);}
+.paste-label{font-size:10px;font-weight:700;color:var(--amber);font-family:var(--mono);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;}
+.paste-row{display:flex;gap:10px;}
+.paste-input{flex:1;background:var(--s1);border:1.5px solid var(--border2);border-radius:8px;padding:9px 14px;font-family:var(--mono);font-size:11px;color:var(--text);outline:none;transition:border-color .15s;}
+.paste-input:focus{border-color:var(--amber);}
+.paste-input::placeholder{color:var(--text3);}
+.btn-load{padding:9px 20px;background:var(--amber);color:white;border:none;border-radius:8px;font-weight:700;font-family:var(--mono);font-size:12px;cursor:pointer;white-space:nowrap;transition:background .15s;}
+.btn-load:hover{background:#92400e;}
+.paste-hint{font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:7px;}
+.loaded-badge{display:none;align-items:center;gap:7px;margin-top:9px;background:var(--green-l);border:1px solid var(--green-b);border-radius:7px;padding:7px 12px;}
+.loaded-badge.show{display:flex;}
+.loaded-badge-text{font-size:11px;font-family:var(--mono);color:var(--green);}
+
+/* COST INPUTS */
+.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.inp-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:10px;}
+.inp-row{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.inp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.inp-name{font-size:12px;font-weight:600;min-width:82px;}
+.inp-field{background:var(--s1);border:1.5px solid var(--border2);border-radius:7px;padding:6px 10px;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text);width:130px;text-align:right;outline:none;transition:border-color .15s;}
+.inp-field:focus{border-color:var(--accent);}
+.inp-unit{font-size:10px;color:var(--text3);font-family:var(--mono);}
+.btn-calc{display:inline-flex;align-items:center;gap:8px;padding:10px 26px;background:var(--accent);color:white;border:none;border-radius:9px;font-weight:700;font-family:var(--mono);font-size:13px;cursor:pointer;box-shadow:0 3px 12px rgba(201,42,42,.22);transition:all .15s;}
+.btn-calc:hover{background:#a82020;transform:translateY(-1px);}
+
+/* SUMMARY */
+.sum-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+.sum-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;box-shadow:var(--sh);}
+.sum-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.sum-val{font-family:var(--mono);font-size:20px;font-weight:800;line-height:1.15;}
+.sum-sub{font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:4px;}
+
+/* PLAN ROI CARD */
+.plan-roi-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--sh);margin-bottom:14px;}
+.plan-header{display:flex;align-items:center;padding:13px 18px;background:var(--s1);border-bottom:1px solid var(--border);gap:12px;}
+.plan-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.plan-name{font-size:14px;font-weight:700;}
+.plan-meta{font-size:11px;color:var(--text3);font-family:var(--mono);margin-left:2px;}
+.plan-invest{margin-left:auto;text-align:right;}
+.plan-invest-label{font-size:9px;color:var(--text3);font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
+.plan-invest-val{font-family:var(--mono);font-size:15px;font-weight:800;color:var(--red);}
+
+/* PAYBACK SECTION */
+.pb-section{display:flex;align-items:stretch;border-bottom:1px solid var(--border);}
+.pb-main{flex:1;padding:16px 18px;}
+.pb-eq{font-size:11px;color:var(--text3);font-family:var(--mono);line-height:1.7;margin-bottom:10px;}
+.pb-eq strong{color:var(--text);font-weight:700;}
+.pb-number-row{display:flex;align-items:baseline;gap:6px;margin-bottom:12px;}
+.pb-num{font-family:var(--mono);font-size:40px;font-weight:800;line-height:1;}
+.pb-unit{font-size:14px;font-weight:600;color:var(--text2);}
+.progress-wrap{margin-top:4px;}
+.progress-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:4px;}
+.progress-track{height:8px;background:var(--s2);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:4px;transition:width .5s;}
+
+.pb-verdict{width:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;border-left:1px solid var(--border);}
+.pb-verdict-icon{font-size:26px;margin-bottom:6px;}
+.pb-verdict-label{font-size:11px;font-weight:700;text-align:center;line-height:1.4;}
+
+/* YEAR BARS */
+.yr-section{padding:16px 18px;}
+.yr-section-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.yr-bars{display:flex;gap:8px;align-items:flex-end;height:100px;}
+.yr-bar-amount{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--text2);white-space:nowrap;}
+.yr-bar-fill{width:100%;border-radius:4px 4px 0 0;}
+.yr-bar-label{font-size:10px;font-weight:700;color:var(--text3);font-family:var(--mono);}
+.yr-cum-pct{font-size:9px;color:var(--text3);font-family:var(--mono);}
+
+/* CHART */
+.chart-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--sh);margin-bottom:16px;}
+.chart-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.chart-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);}
+.legend{display:flex;gap:14px;flex-wrap:wrap;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text2);font-family:var(--mono);}
+.leg-line{width:18px;height:2px;border-radius:1px;}
+
+/* TABLE */
+.detail-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;}
+.detail-table th{padding:7px 10px;text-align:right;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;border-bottom:2px solid var(--border);background:var(--s1);}
+.detail-table th:first-child,.detail-table th:nth-child(2),.detail-table th:nth-child(3){text-align:left;}
+.detail-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text2);text-align:right;}
+.detail-table td:first-child,.detail-table td:nth-child(2),.detail-table td:nth-child(3){text-align:left;}
+.detail-table tr:last-child td{border-bottom:none;}
+.detail-table tr:hover td{background:var(--s1);}
+.td-prod{display:flex;align-items:center;gap:7px;}
+.td-dot{width:7px;height:7px;border-radius:50%;}
+
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--green);color:white;border-radius:8px;padding:10px 18px;font-family:var(--mono);font-size:12px;font-weight:700;display:none;box-shadow:var(--sh2);}
+.empty{text-align:center;padding:60px 20px;color:var(--text3);}
+.empty-icon{font-size:40px;margin-bottom:12px;}
+.empty-title{font-size:16px;font-weight:700;color:var(--text2);margin-bottom:6px;}
+.empty-desc{font-size:12px;line-height:1.7;}
+
+@media(max-width:700px){
+  .wrap{padding:12px;}
+  .cost-grid,.sum-strip{grid-template-columns:1fr;}
+  .pb-section{flex-direction:column;}
+  .pb-verdict{width:100%;flex-direction:row;gap:10px;border-left:none;border-top:1px solid var(--border);}
+  .yr-bars{height:70px;}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="hd-left">
+    <div class="hd-logo">💹</div>
+    <div>
+      <div class="hd-title" id="t-title">Masimo · ROI Analyzer</div>
+      <div class="hd-sub" id="t-sub">DECISION-MAKER ONLY · CONFIDENTIAL</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="cur-toggle">
+      <button class="cur-btn" onclick="setCur('usd')" id="btn-usd">$ USD</button>
+      <button class="cur-btn active" onclick="setCur('krw')" id="btn-krw">₩ KRW</button>
+    </div>
+    <div class="hd-badge">INTERNAL ONLY</div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+      <button class="lang-btn" onclick="setLang('ko')" id="btn-ko">한국어</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ① LOAD STATE -->
+  <div class="paste-card">
+    <div class="paste-label" id="t-paste-label">① Load Territory Data — Paste State Code from CR Workbook</div>
+    <div class="paste-row">
+      <input class="paste-input" id="paste-inp" placeholder="20260320_14:35||eyJTcEhiIjp7ImNpIjo...">
+      <button class="btn-load" onclick="loadState()" id="t-btn-load">Load ▶</button>
+    </div>
+    <div class="paste-hint" id="t-paste-hint">From CR Workbook → Copy State Code → paste here</div>
+    <div class="loaded-badge" id="loaded-badge">
+      <span>✅</span>
+      <span class="loaded-badge-text" id="loaded-text">로드 완료</span>
+    </div>
+  </div>
+
+  <!-- LOAD PREVIEW -->
+  <div id="load-preview" style="display:none;" class="card">
+    <div class="sec-h" style="margin-bottom:12px;">
+      <div class="sec-num" style="background:var(--amber);">📋</div>
+      <div class="sec-title" id="t-preview-title">Loaded Territory Summary</div>
+      <div style="margin-left:auto;font-size:10px;color:var(--text3);font-family:var(--mono);" id="t-preview-hint">New install plans · verify before ROI calc</div>
+    </div>
+    <div id="preview-body"></div>
+  </div>
+
+  <!-- ② COST INPUTS -->
+  <div class="card">
+    <div class="sec-h">
+      <div class="sec-num">②</div>
+      <div class="sec-title" id="t-cost-title">Cost Parameters</div>
+      <div style="margin-left:auto;font-size:10px;color:var(--text3);font-family:var(--mono);" id="t-cost-hint">Defaults pre-filled · editable</div>
+    </div>
+    <div class="cost-grid">
+      <div>
+        <div class="inp-label" id="t-dev-label">Device COGS (per unit)</div>
+        <div id="dev-inputs"></div>
+      </div>
+      <div>
+        <div class="inp-label" id="t-sen-label">Sensor COGS (per sensor)</div>
+        <div id="sen-inputs"></div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <button class="btn-calc" onclick="runROI()" id="t-btn-calc">▶ Calculate ROI</button>
+      <span style="font-size:11px;color:var(--text3);font-family:var(--mono);" id="t-calc-hint">Only products with new install plans are analyzed</span>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" style="display:none;">
+
+    <!-- SUMMARY -->
+    <div class="sum-strip" id="sum-strip"></div>
+
+    <!-- PLAN CARDS -->
+    <div class="card">
+      <div class="sec-h">
+        <div class="sec-num">③</div>
+        <div class="sec-title" id="t-plan-title">ROI Analysis by Plan</div>
+        <div style="margin-left:auto;font-size:10px;color:var(--text3);font-family:var(--mono);" id="t-plan-hint">New install revenue only (Base excluded)</div>
+      </div>
+      <div id="plan-cards"></div>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart-card">
+      <div class="chart-head">
+        <div class="sec-num" style="background:var(--accent);">④</div>
+        <div class="chart-title" id="t-chart-title">Cumulative Payback Chart</div>
+        <div class="legend">
+          <div class="leg-item"><div class="leg-line" style="background:#16a34a;height:2.5px;"></div><span id="t-leg1">Cumulative Net Margin</span></div>
+          <div class="leg-item"><div class="leg-line" style="background:#3b82f6;border-top:2px dashed #3b82f6;height:0;opacity:.6;"></div><span id="t-leg-rev">Revenue (ref.)</span></div>
+          <div class="leg-item"><div class="leg-line" style="background:#dc2626;border-top:2px dashed #dc2626;height:0;"></div><span id="t-leg2">Total Device Investment</span></div>
+          <div class="leg-item"><div style="width:9px;height:9px;border-radius:50%;background:#16a34a;"></div><span id="t-leg3">Payback Point</span></div>
+        </div>
+        <select id="chart-sel" onchange="drawChart()" style="margin-left:auto;background:var(--s1);border:1px solid var(--border2);color:var(--text);border-radius:6px;padding:5px 10px;font-family:var(--mono);font-size:11px;cursor:pointer;">
+          <option value="all" id="t-sel-all">All Products</option>
+        </select>
+      </div>
+      <svg id="roi-svg" viewBox="0 0 1100 300" preserveAspectRatio="xMidYMid meet" style="width:100%;display:block;background:#fafbfc;"></svg>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+      <div class="sec-h">
+        <div class="sec-num">⑤</div>
+        <div class="sec-title" id="t-table-title">Annual Detail (New Install Revenue)</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="detail-table" id="detail-table"></table>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+
+  <div class="empty" id="empty">
+    <div class="empty-icon">💹</div>
+    <div class="empty-title" id="t-empty-title">Load Territory Data</div>
+    <div class="empty-desc" id="t-empty-desc">CR Workbook → Copy State Code → paste above<br>Set cost parameters, then click Calculate ROI</div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── ALL CONSTANTS FIRST ──
+const ASP_FX = 1370.2176;
+const N = 60;
+const YEARS = [2026,2027,2028,2029,2030];
+const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MO2 = YEARS.flatMap(yr=>MO.map(m=>m+"'"+String(yr).slice(2)));
+
+const PRODS = [
+  {id:'SpHb',    name:'SpHb',       color:'#e67700', devKRW:622565,   senKRW:14140},
+  {id:'SedLine', name:'SedLine',    color:'#c92a2a', devKRW:2050000,  senKRW:7188},
+  {id:'O3',      name:'O3',         color:'#2b8a3e', devKRW:223800,   senKRW:20155},
+  {id:'PVi',     name:'SpO2 (PVi)', color:'#1864ab', devKRW:0,        senKRW:1511},
+];
+const COSTS = {};
+PRODS.forEach(p=>{COSTS[p.id]={dev:p.devKRW/ASP_FX, sen:p.senKRW/ASP_FX};});
+
+let currency='krw', lang='en', S={}, roiData=null;
+
+const T={
+  en:{
+    sub:'DECISION-MAKER ONLY · CONFIDENTIAL', badge:'INTERNAL ONLY',
+    pasteLabel:'① Load Territory Data — Paste State Code from CR Workbook',
+    pasteHint:'From CR Workbook → Copy State Code → paste here', btnLoad:'Load ▶',
+    costTitle:'Cost Parameters', costHint:'Defaults pre-filled · editable',
+    devLabel:'Device COGS (per unit installed)', senLabel:'Sensor COGS (per sensor)',
+    btnCalc:'▶ Calculate ROI', calcHint:'Products with new install plans only',
+    planTitle:'ROI by Plan', planHint:'New install revenue only · Base excluded',
+    chartTitle:'Cumulative Payback Chart',
+    leg1:'Cumulative Net Margin (new installs)', leg2:'Total Device Investment', leg3:'Payback Point',
+    selAll:'All Products', tableTitle:'Annual Detail',
+    previewTitle:'Loaded Territory Summary', previewHint:'New install plans · verify before ROI calc',
+    emptyTitle:'Load Territory Data',
+    emptyDesc:'CR Workbook → Copy State Code → paste above<br>Set cost parameters and click Calculate ROI',
+    scInvest:'Total Device Investment', scInvestSub:'Device COGS for new installs',
+    scUnits:'New Units', scUnitsSub:' plan(s)',
+    scFast:'Fastest Payback', scFastNone:'No payback',
+    scFastY1:'Within Year 1', scFastY2:'Within Year 2', scFastLong:'Long-term',
+    sc5rev:'5-Year New Revenue', sc5revSub:'New install cumulative',
+    planMeta:'Plan #%i · Start: %m · %u units new', investLabel:'Device Investment',
+    eqDiv:'%inv (device) ÷ ~%margin/mo net margin (full ramp) → %pb months actual payback incl. ramp-up', eqNoInv:'No device cost',
+    pbUnit:' months to payback', pbNone:'No payback in 5 yrs',
+    progLabel:'5-yr net margin / device investment',
+    lblMonthlyRev:'Monthly Sensor Revenue', lblMonthlyCogs:'Sensor COGS/mo',
+    lblMonthlyMargin:'Net Margin/mo', lblYrRev:'Annual Revenue', lblYrMargin:'Annual Net Margin',
+    verdictGood:'Payback Year 1', verdictOk:'Payback Year 2',
+    verdictWarn:'Long-term', verdictNone:'No payback',
+    yrLabel:'Annual Net Margin Recovery',
+    tlRevMargin:'margin bar (vs investment)', tlNetMargin:'Net Margin', tlCumPct:'Cum.%',
+    pbTag:'mo payback',
+    invLine:'Investment ', paybackLabel:'✓ Payback %m mo',
+    thProd:'Product', thPlan:'Plan', thStart:'Start', thUnits:'Units',
+    thInvest:'Device Investment', thTotal:'5Y Total', thPayback:'Payback',
+    months:'mo', units:' units', loaded:' plan(s) loaded',
+    noState:'Please paste a State Code first.',
+    noPlans:'No new install plans found.\nAdd Installation Plans in the CR Workbook.',
+    invalid:'Invalid code.\n',
+  },
+  ko:{
+    sub:'의사결정자 전용 · 대외비', badge:'내부 전용',
+    pasteLabel:'① Territory 데이터 로드 — CR Workbook State Code 붙여넣기',
+    pasteHint:'담당자 CR Workbook → Copy State Code → 여기에 붙여넣기', btnLoad:'로드 ▶',
+    costTitle:'원가 파라미터', costHint:'기본값 설정됨 · 직접 수정 가능',
+    devLabel:'장비 원가 (대당)', senLabel:'센서 원가 (개당)',
+    btnCalc:'▶ ROI 계산', calcHint:'신규 설치 플랜이 있는 제품만 분석',
+    planTitle:'플랜별 ROI 분석', planHint:'신규 설치 레비뉴만 산정 · Base 제외',
+    chartTitle:'누적 투자 회수 차트',
+    leg1:'누적 순마진 (신규 설치)', leg2:'총 장비 투자금', leg3:'Payback 시점',
+    selAll:'전체 합산', tableTitle:'연도별 상세',
+    previewTitle:'로드된 Territory 요약', previewHint:'신규 설치 플랜 · ROI 계산 전 확인',
+    emptyTitle:'Territory 데이터를 로드하세요',
+    emptyDesc:'CR Workbook → Copy State Code → 위에 붙여넣기<br>원가 파라미터 확인 후 ROI 계산 클릭',
+    scInvest:'총 장비 투자금', scInvestSub:'신규 설치 Device COGS',
+    scUnits:'신규 설치', scUnitsSub:'개 플랜',
+    scFast:'최단 회수 기간', scFastNone:'미회수',
+    scFastY1:'Year 1 내', scFastY2:'Year 2 내', scFastLong:'장기',
+    sc5rev:'5년 신규 레비뉴', sc5revSub:'New Install 누적',
+    planMeta:'Plan #%i · 시작: %m · %u대 신규', investLabel:'장비 투자금',
+    eqDiv:'%inv (장비) ÷ ~%margin/월 (완전 가동 기준) → 실제 %pb개월 회수 (램프업 포함)', eqNoInv:'장비 원가 없음',
+    pbUnit:'개월 후 회수', pbNone:'5년 내 미회수',
+    progLabel:'5년 순마진 / 장비 투자금',
+    lblMonthlyRev:'월 센서 매출', lblMonthlyCogs:'월 센서 원가',
+    lblMonthlyMargin:'월 순마진', lblYrRev:'연 매출', lblYrMargin:'연 순마진',
+    verdictGood:'Year 1 회수', verdictOk:'Year 2 회수',
+    verdictWarn:'장기 회수', verdictNone:'미회수',
+    yrLabel:'연도별 순마진 회수 현황',
+    tlRevMargin:'순마진 바 (투자금 대비)', tlNetMargin:'순마진', tlCumPct:'누적%',
+    pbTag:'개월 회수',
+    invLine:'투자금 ', paybackLabel:'✓ %m개월 회수',
+    thProd:'제품', thPlan:'플랜', thStart:'시작월', thUnits:'대수',
+    thInvest:'장비 투자금', thTotal:'5년 합계', thPayback:'회수 기간',
+    months:'개월', units:'대', loaded:'개 플랜 로드',
+    noState:'State code를 붙여넣어 주세요.',
+    noPlans:'신규 설치 플랜이 없습니다.\nCR Workbook에서 Installation Plan을 추가하세요.',
+    invalid:'잘못된 코드입니다.\n',
+  }
+};
+function tx(k){return T[lang][k]||T.en[k]||k;}
+
+function setCur(c){
+  currency=c;
+  document.getElementById('btn-usd').classList.toggle('active',c==='usd');
+  document.getElementById('btn-krw').classList.toggle('active',c==='krw');
+  renderCostInputs();
+  if(roiData) renderResults();
+}
+
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-en').classList.toggle('active',l==='en');
+  document.getElementById('btn-ko').classList.toggle('active',l==='ko');
+  const map={'t-sub':'sub','t-badge':'badge','t-paste-label':'pasteLabel','t-paste-hint':'pasteHint',
+    't-btn-load':'btnLoad','t-cost-title':'costTitle','t-cost-hint':'costHint',
+    't-dev-label':'devLabel','t-sen-label':'senLabel','t-btn-calc':'btnCalc','t-calc-hint':'calcHint',
+    't-plan-title':'planTitle','t-plan-hint':'planHint','t-chart-title':'chartTitle',
+    't-leg1':'leg1','t-leg2':'leg2','t-leg3':'leg3','t-table-title':'tableTitle',
+    't-empty-title':'emptyTitle','t-empty-desc':'emptyDesc',
+    't-preview-title':'previewTitle','t-preview-hint':'previewHint'};
+  Object.entries(map).forEach(([id,k])=>{const el=document.getElementById(id);if(el)el.innerHTML=tx(k);});
+  const so=document.getElementById('t-sel-all');if(so)so.textContent=tx('selAll');
+  renderCostInputs();
+  if(Object.keys(S).length) renderLoadPreview();
+  if(roiData) renderResults();
+}
+
+function fM(v){
+  if(v===null||v===undefined) return '—';
+  const sign=v<0?'-':'';
+  if(currency==='krw'){
+    const w=Math.abs(v*ASP_FX);
+    if(w>=1e8) return sign+'₩'+(w/1e8).toFixed(2)+'억';
+    if(w>=1e6) return sign+'₩'+(w/1e6).toFixed(1)+'백만';
+    if(w>=1e3) return sign+'₩'+(w/1e3).toFixed(0)+'천';
+    return sign+'₩'+Math.round(w).toLocaleString();
+  }
+  const a=Math.abs(v);
+  if(a>=1e6) return sign+'$'+(a/1e6).toFixed(2)+'M';
+  if(a>=1e3) return sign+'$'+(a/1e3).toFixed(1)+'K';
+  return sign+'$'+Math.round(a);
+}
+function fMs(v){
+  const sign=v<0?'-':'';
+  if(currency==='krw'){
+    const w=Math.abs(v*ASP_FX);
+    if(w>=1e8) return sign+'₩'+(w/1e8).toFixed(1)+'억';
+    if(w>=1e6) return sign+'₩'+(w/1e6).toFixed(0)+'백만';
+    return sign+'₩'+(w/1e3).toFixed(0)+'천';
+  }
+  const a=Math.abs(v);
+  if(a>=1e6) return sign+'$'+(a/1e6).toFixed(1)+'M';
+  if(a>=1e3) return sign+'$'+(a/1e3).toFixed(0)+'K';
+  return sign+'$'+Math.round(a);
+}
+
+function renderCostInputs(){
+  ['dev','sen'].forEach((key,ki)=>{
+    const wrap=document.getElementById(ki===0?'dev-inputs':'sen-inputs');
+    if(!wrap) return;
+    wrap.innerHTML='';
+    PRODS.forEach(p=>{
+      const usd=COSTS[p.id][key];
+      const raw=currency==='krw'?Math.round(usd*ASP_FX):+usd.toFixed(2);
+      const row=document.createElement('div');
+      row.className='inp-row';
+      row.innerHTML='<div class="inp-dot" style="background:'+p.color+'"></div>'
+        +'<div class="inp-name">'+p.name+'</div>'
+        +'<input class="inp-field" type="text" value="'+raw.toLocaleString()+'"'
+        +' data-pid="'+p.id+'" data-key="'+key+'" oninput="onCI(this)" onblur="onCB(this)">'
+        +'<div class="inp-unit">'+(currency==='krw'?'₩':'$')+'/unit</div>';
+      wrap.appendChild(row);
+    });
+  });
+}
+function pN(s){return parseFloat(String(s).replace(/,/g,''))||0;}
+function onCI(el){const v=pN(el.value);COSTS[el.dataset.pid][el.dataset.key]=currency==='krw'?v/ASP_FX:v;}
+function onCB(el){
+  const usd=COSTS[el.dataset.pid][el.dataset.key];
+  el.value=(currency==='krw'?Math.round(usd*ASP_FX):+usd.toFixed(2)).toLocaleString();
+}
+
+function loadState(){
+  const raw=document.getElementById('paste-inp').value.trim();
+  if(!raw){alert(tx('noState'));return;}
+  try{
+    let b64=raw.includes('||')?raw.split('||')[1].trim():raw;
+    const st=JSON.parse(decodeURIComponent(escape(atob(b64))));
+    S={};
+    PRODS.forEach(p=>{
+      const d=st[p.id]||{};
+      S[p.id]={curInstall:d.ci||0,curYield:d.cy||0,yieldGrowth:d.yg||0,
+        asp:d.asp||(p.senKRW/ASP_FX),
+        plans:(d.plans||[]).map(pl=>({startMonth:pl.sm,install:pl.inst,manualYield:pl.my}))};
+    });
+    const alias=raw.includes('||')?raw.split('||')[0].trim():'';
+    const nPlans=PRODS.reduce((s,p)=>s+(S[p.id]?.plans?.length||0),0);
+    document.getElementById('loaded-badge').classList.add('show');
+    document.getElementById('loaded-text').textContent=(alias?alias+' · ':'')+nPlans+tx('loaded');
+    const sel=document.getElementById('chart-sel');
+    sel.innerHTML='<option value="all">'+tx('selAll')+'</option>';
+    PRODS.forEach(p=>{if(S[p.id]?.plans?.length){const o=document.createElement('option');o.value=p.id;o.textContent=p.name;sel.appendChild(o);}});
+    document.getElementById('empty').style.display='none';
+    renderLoadPreview();
+    showToast(lang==='ko'?'✓ 로드 완료':'✓ Loaded');
+  }catch(e){alert(tx('invalid')+e.message);}
+}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
+
+function renderLoadPreview(){
+  const prods=PRODS.filter(p=>S[p.id]&&S[p.id].plans&&S[p.id].plans.some(pl=>pl.install));
+  const preview=document.getElementById('load-preview');
+  const body=document.getElementById('preview-body');
+  if(!prods.length){preview.style.display='none';return;}
+  preview.style.display='block';
+
+  const isKo=lang==='ko';
+  const thStyle='padding:6px 10px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;border-bottom:2px solid var(--border);background:var(--s1);white-space:nowrap;';
+  const tdStyle='padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle;';
+
+  // Headers: Product | Base Install | Base Yield | Plan | Start | +New Units | Est. Mo. Revenue
+  const cols=isKo
+    ?['제품','현재 설치','기본 Yield','플랜','시작월','+신규 대수','예상 월 레비뉴']
+    :['Product','Base Install','Base Yield','Plan','Start','+New Units','Est. Mo. Revenue'];
+
+  let html='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;">';
+  html+='<thead><tr>'+cols.map(h=>'<th style="'+thStyle+'">'+h+'</th>').join('')+'</tr></thead><tbody>';
+
+  prods.forEach(p=>{
+    const s=S[p.id];
+    const validPlans=s.plans.filter(pl=>pl.install);
+    const totalNew=validPlans.reduce((a,pl)=>a+pl.install,0);
+
+    validPlans.forEach((pl,pi)=>{
+      const bY=pl.manualYield!==null&&pl.manualYield!==undefined?pl.manualYield:s.curYield;
+      const sm=pl.startMonth; // fix: use pl.startMonth not pl.sm
+      const monthlyRevFull=pl.install*bY*1.0*s.asp;
+      const startLabel=MO2[sm]||('mo'+sm);
+
+      html+='<tr>'
+        // Product col — rowspan for first plan only
+        +(pi===0
+          ?'<td style="'+tdStyle+'" rowspan="'+validPlans.length+'">'
+            +'<div style="display:flex;align-items:center;gap:7px;">'
+            +'<div style="width:8px;height:8px;border-radius:50%;background:'+p.color+';flex-shrink:0;"></div>'
+            +'<strong>'+p.name+'</strong></div></td>'
+            // Base install = curInstall (existing) + totalNew (all plans)
+            +'<td style="'+tdStyle+'" rowspan="'+validPlans.length+'">'
+            +'<span style="color:var(--text2);">'+s.curInstall+'</span>'
+            +'<span style="color:var(--green);font-weight:700;"> +'+totalNew+'</span>'
+            +'<div style="font-size:9px;color:var(--text3);">'+(isKo?'현재 + 신규':'base + new')+'</div>'
+            +'</td>'
+            // Yield col
+            +'<td style="'+tdStyle+'" rowspan="'+validPlans.length+'">'+s.curYield+(isKo?'/대/월':'/u/mo')+'</td>'
+          :'')
+        // Plan #
+        +'<td style="'+tdStyle+';color:var(--accent);font-weight:700;">Plan #'+(pi+1)+'</td>'
+        // Start month
+        +'<td style="'+tdStyle+'">'+startLabel+'</td>'
+        // New units
+        +'<td style="'+tdStyle+';font-weight:700;color:var(--blue);">+'+pl.install+(isKo?'대':' u')+'</td>'
+        // Est monthly revenue
+        +'<td style="'+tdStyle+';font-weight:700;color:var(--green);">'+fM(monthlyRevFull)+'</td>'
+        +'</tr>';
+    });
+  });
+  html+='</tbody></table></div>';
+
+  // Summary cards
+  const totalUnits=prods.reduce((s,p)=>s+S[p.id].plans.reduce((a,pl)=>a+(pl.install||0),0),0);
+  const totalYr1Rev=prods.reduce((tot,p)=>{
+    const s=S[p.id];
+    return tot+s.plans.reduce((a,pl)=>{
+      if(!pl.install) return a;
+      const bY=pl.manualYield!==null&&pl.manualYield!==undefined?pl.manualYield:s.curYield;
+      const sm=pl.startMonth; // fix: use startMonth
+      let yr1=0;
+      for(let mo=0;mo<12;mo++){
+        const mi=sm+mo; if(mi>=12) break;
+        const ramp=mo<=2?.5:mo<=5?.75:1;
+        yr1+=pl.install*bY*ramp*s.asp;
+      }
+      return a+yr1;
+    },0);
+  },0);
+
+  const cardStyle='background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px 16px;';
+  const lblStyle='font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px;';
+  html+='<div style="display:flex;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap;">'
+    +'<div style="'+cardStyle+'">'
+      +'<div style="'+lblStyle+'">'+(isKo?'총 신규 설치 대수':'Total New Units')+'</div>'
+      +'<div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--blue)">'+totalUnits+(isKo?'대':' units')+'</div>'
+    +'</div>'
+    +'<div style="'+cardStyle+'">'
+      +'<div style="'+lblStyle+'">'+(isKo?'예상 Year-1 신규 레비뉴':'Est. Year-1 New Revenue')+'</div>'
+      +'<div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--green)">'+fM(totalYr1Rev)+'</div>'
+      +'<div style="font-size:9px;color:var(--text3);font-family:var(--mono);margin-top:2px;">'+(isKo?'램프업 기간 포함':'incl. ramp-up')+'</div>'
+    +'</div>'
+  +'</div>';
+
+  body.innerHTML=html;
+}
+
+function qMult(gr,mi){return Math.pow(1+gr/100,Math.floor(mi/3));}
+
+function computePlan(pid,idx){
+  const s=S[pid];if(!s)return null;
+  const pl=s.plans[idx];if(!pl||!pl.install)return null;
+  const p=PRODS.find(x=>x.id===pid);
+  const asp=s.asp, sCost=COSTS[pid].sen, dCost=COSTS[pid].dev;
+  const gr=s.yieldGrowth, sm=pl.startMonth, units=pl.install;
+  const manual=pl.manualYield!==null&&pl.manualYield!==undefined;
+  const bY=manual?pl.manualYield:s.curYield;
+  const invest=dCost*units;
+
+  const mSens=new Array(N).fill(0);
+  const mRev=new Array(N).fill(0);
+  const mCogs=new Array(N).fill(0);
+  const mMargin=new Array(N).fill(0);
+
+  for(let mi=0;mi<N;mi++){
+    if(mi<sm)continue;
+    const age=mi-sm;
+    const ramp=manual?1:(age<=2?.5:age<=5?.75:1);
+    const sens=units*bY*ramp*qMult(gr,mi);
+    mSens[mi]=sens;
+    mRev[mi]=sens*asp;
+    mCogs[mi]=sens*sCost;
+    mMargin[mi]=mRev[mi]-mCogs[mi];
+  }
+
+  const yrRev=YEARS.map((_,yi)=>{let v=0;for(let mo=0;mo<12;mo++)v+=mRev[yi*12+mo];return v;});
+  const yrMargin=YEARS.map((_,yi)=>{let v=0;for(let mo=0;mo<12;mo++)v+=mMargin[yi*12+mo];return v;});
+  const yrSens=YEARS.map((_,yi)=>{let v=0;for(let mo=0;mo<12;mo++)v+=mSens[yi*12+mo];return v;});
+
+  let cum=0;
+  const cumMarginArr=mMargin.map(v=>{cum+=v;return cum;});
+  let cumR=0;
+  const cumRevArr=mRev.map(v=>{cumR+=v;return cumR;});
+
+  let paybackMonth=null;
+  for(let mi=0;mi<N;mi++){if(cumMarginArr[mi]>=invest){paybackMonth=mi;break;}}
+
+  const total5Rev=yrRev.reduce((a,b)=>a+b,0);
+  const total5Margin=yrMargin.reduce((a,b)=>a+b,0);
+  const total5Sens=yrSens.reduce((a,b)=>a+b,0);
+
+  const rampedIdx=Math.min(sm+7,N-1);
+  const monthlyRevFull=mRev[rampedIdx];
+  const monthlyMarginFull=mMargin[rampedIdx];
+  const monthlyCogsFull=mCogs[rampedIdx];
+  const monthlySensFull=mSens[rampedIdx];
+
+  // Ramp phases (auto ramp only)
+  const rampPhases=manual?null:{
+    p1Sens:units*bY*0.5,   p1Margin:units*bY*0.5*(asp-sCost),
+    p2Sens:units*bY*0.75,  p2Margin:units*bY*0.75*(asp-sCost),
+    p3Sens:units*bY*1.0,   p3Margin:units*bY*1.0*(asp-sCost),
+  };
+
+  return {pid,idx,p,pl,sm,units,invest,bY,manual,
+    mSens,mRev,mCogs,mMargin,
+    yrRev,yrMargin,yrSens,
+    cumRevArr,cumMarginArr,
+    paybackMonth,
+    total5Rev,total5Margin,total5Sens,
+    monthlyRevFull,monthlyMarginFull,monthlyCogsFull,monthlySensFull,
+    rampPhases,asp,sCost,dCost};
+}
+
+function runROI(){
+  if(!S||!Object.keys(S).length){alert(tx('noState'));return;}
+  roiData=[];
+  PRODS.forEach(p=>(S[p.id]?.plans||[]).forEach((_,i)=>{const r=computePlan(p.id,i);if(r)roiData.push(r);}));
+  if(!roiData.length){alert(tx('noPlans'));return;}
+  renderResults();
+  document.getElementById('results').style.display='block';
+  document.getElementById('empty').style.display='none';
+}
+
+function renderResults(){
+  if(!roiData)return;
+  renderSummary();renderPlanCards();drawChart();renderTable();
+}
+
+function renderSummary(){
+  const totalInvest=roiData.reduce((s,r)=>s+r.invest,0);
+  const totalUnits=roiData.reduce((s,r)=>s+r.units,0);
+  const pbs=roiData.filter(r=>r.paybackMonth!==null).map(r=>r.paybackMonth);
+  const fastPB=pbs.length?Math.min(...pbs):null;
+  const total5=roiData.reduce((s,r)=>s+r.total5Rev,0);
+  document.getElementById('sum-strip').innerHTML=
+    sc(tx('scInvest'),fM(totalInvest),tx('scInvestSub'),'var(--red)')
+    +sc(tx('scUnits'),totalUnits+tx('units'),roiData.length+tx('scUnitsSub'),'var(--blue)')
+    +sc(tx('scFast'),fastPB!==null?fastPB+tx('months'):tx('scFastNone'),
+       fastPB!==null?(fastPB<12?tx('scFastY1'):fastPB<24?tx('scFastY2'):tx('scFastLong')):'','var(--green)')
+    +sc(tx('sc5rev'),fM(total5),tx('sc5revSub'),'var(--amber)');
+}
+function sc(l,v,s,c){return '<div class="sum-card"><div class="sum-label">'+l+'</div><div class="sum-val" style="color:'+c+'">'+v+'</div><div class="sum-sub">'+s+'</div></div>';}
+
+function renderPlanCards(){
+  const wrap=document.getElementById('plan-cards');
+  if(!roiData.length){wrap.innerHTML='';return;}
+  const isKo=lang==='ko';
+
+  wrap.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;">'
+    +roiData.map(r=>{
+      const pb=r.paybackMonth;
+      const cls=pb===null?'None':pb<12?'Good':pb<24?'Ok':'Warn';
+      const pbColor=cls==='Good'?'var(--green)':cls==='Ok'?'var(--amber)':cls==='Warn'?'var(--red)':'var(--text3)';
+      const icon=cls==='Good'?'✅':cls==='Ok'?'⚡':cls==='Warn'?'⚠️':'❌';
+      const verdict=tx('verdict'+cls);
+      const recov=r.invest>0?Math.min(100,Math.round(r.total5Margin/r.invest*100)):100;
+      const recovColor=recov>=100?'var(--green)':recov>=50?'var(--amber)':'var(--red)';
+      // Monthly payback contribution: full-ramp margin as % of invest per month
+      const monthlyRecovPct=r.invest>0?Math.round(r.monthlyMarginFull/r.invest*100*10)/10:100;
+      const net5=r.total5Margin-r.invest; // 5yr net profit after device cost
+
+      // ── Sensor yield table (ramp phases) ──
+      const yieldTag=r.manual
+        ?'<span style="background:rgba(59,130,246,.12);color:var(--blue);border-radius:3px;padding:1px 6px;font-size:8px;font-weight:700;">MANUAL</span>'
+        :'<span style="background:rgba(22,163,74,.1);color:var(--green);border-radius:3px;padding:1px 6px;font-size:8px;font-weight:700;">AUTO RAMP</span>';
+
+      const thS='padding:4px 8px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;border-bottom:1px solid var(--border);background:var(--s1);text-align:right;white-space:nowrap;';
+      const tdS='padding:5px 8px;font-size:10px;font-family:var(--mono);border-bottom:1px solid var(--border);text-align:right;color:var(--text2);';
+      const tdSL='padding:5px 8px;font-size:10px;font-family:var(--mono);border-bottom:1px solid var(--border);text-align:left;color:var(--text3);';
+
+      let sensorTable;
+      if(r.manual){
+        // Manual yield — single row
+        const sens=r.monthlySensFull;
+        const rev=r.monthlyRevFull;
+        const cogs=r.monthlyCogsFull;
+        const margin=r.monthlyMarginFull;
+        sensorTable='<table style="width:100%;border-collapse:collapse;">'
+          +'<thead><tr>'
+          +'<th style="'+thS+';text-align:left;">'+(isKo?'구간':'Phase')+'</th>'
+          +'<th style="'+thS+'">'+(isKo?'센서수/월':'Sensors/mo')+'</th>'
+          +'<th style="'+thS+'">'+(isKo?'매출/월':'Revenue/mo')+'</th>'
+          +'<th style="'+thS+'">'+(isKo?'원가/월':'COGS/mo')+'</th>'
+          +'<th style="'+thS+';color:var(--green);">'+(isKo?'마진/월':'Margin/mo')+'</th>'
+          +'</tr></thead><tbody>'
+          +'<tr>'
+          +'<td style="'+tdSL+'">'+(isKo?'전 기간':'All months')+'</td>'
+          +'<td style="'+tdS+'">'+Math.round(sens)+'ea</td>'
+          +'<td style="'+tdS+'">'+fM(rev)+'</td>'
+          +'<td style="'+tdS+';color:var(--red);">'+fM(cogs)+'</td>'
+          +'<td style="'+tdS+';color:var(--green);font-weight:700;">'+fM(margin)+'</td>'
+          +'</tr>'
+          +'</tbody></table>';
+      } else {
+        // Auto ramp — 3 phase rows
+        const ph=r.rampPhases;
+        const rows=[
+          {label:isKo?'1-3개월 (50%)':'mo 1-3 (50%)', sens:ph.p1Sens, margin:ph.p1Margin, rev:ph.p1Sens*r.asp, cogs:ph.p1Sens*r.sCost},
+          {label:isKo?'4-6개월 (75%)':'mo 4-6 (75%)', sens:ph.p2Sens, margin:ph.p2Margin, rev:ph.p2Sens*r.asp, cogs:ph.p2Sens*r.sCost},
+          {label:isKo?'7개월+ (100%)':'mo 7+ (100%)',  sens:ph.p3Sens, margin:ph.p3Margin, rev:ph.p3Sens*r.asp, cogs:ph.p3Sens*r.sCost, full:true},
+        ];
+        sensorTable='<table style="width:100%;border-collapse:collapse;">'
+          +'<thead><tr>'
+          +'<th style="'+thS+';text-align:left;">'+(isKo?'램프업 구간':'Ramp Phase')+'</th>'
+          +'<th style="'+thS+'">'+(isKo?'센서/월':'Sensors/mo')+'</th>'
+          +'<th style="'+thS+'">'+(isKo?'매출/월':'Revenue/mo')+'</th>'
+          +'<th style="'+thS+'">'+(isKo?'원가/월':'COGS/mo')+'</th>'
+          +'<th style="'+thS+';color:var(--green);">'+(isKo?'마진/월':'Margin/mo')+'</th>'
+          +'</tr></thead><tbody>'
+          +rows.map(row=>'<tr style="background:'+(row.full?'rgba(22,163,74,.03)':'transparent')+';">'
+            +'<td style="'+tdSL+(row.full?';font-weight:700;color:var(--text);':'')+'">'+row.label+'</td>'
+            +'<td style="'+tdS+'">'+Math.round(row.sens)+'ea</td>'
+            +'<td style="'+tdS+'">'+fM(row.rev)+'</td>'
+            +'<td style="'+tdS+';color:var(--red);">'+fM(row.cogs)+'</td>'
+            +'<td style="'+tdS+';color:var(--green);font-weight:'+(row.full?'700':'500')+';">'+fM(row.margin)+'</td>'
+            +'</tr>').join('')
+          +'</tbody></table>';
+      }
+
+      // ── Payback equation ──
+      const pbEq=r.invest>0
+        ?('<span style="font-family:var(--mono);font-size:10px;color:var(--text3);">'
+          +fM(r.invest)+(isKo?' ÷ ':' ÷ ')
+          +fM(r.monthlyMarginFull)+(isKo?'/월 (완전 가동)':'/mo (full ramp)')
+          +' = <strong style="color:'+pbColor+';">'+(pb!==null?pb+'mo':'—')+'</strong>'
+          +(r.manual?'':' <span style="font-size:9px;color:var(--text3);">'+(isKo?'※램프업 포함 실제':'※actual incl.ramp')+'</span>')
+          +'</span>')
+        :(isKo?'장비 원가 없음 — 즉시 수익':'No device cost — immediate profit');
+
+      // ── Year timeline (compact) ──
+      const tlMax=Math.max(...r.yrMargin,1);
+      let cumMt=0;
+      const tl=YEARS.map((yr,yi)=>{
+        const m=r.yrMargin[yi];
+        const sens=r.yrSens[yi];
+        cumMt+=m;
+        const barW=Math.max(2,Math.round((m/tlMax)*100));
+        const cumPct=r.invest>0?Math.min(999,Math.round(cumMt/r.invest*100)):100;
+        const isDone=pb!==null&&pb<(yi+1)*12&&pb>=yi*12;
+        return '<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">'
+          +'<div style="width:26px;font-size:8px;color:var(--text3);font-family:var(--mono);flex-shrink:0;">'+yr+'</div>'
+          +'<div style="flex:1;height:13px;background:var(--s2);border-radius:2px;overflow:hidden;position:relative;">'
+            +'<div style="height:100%;width:'+barW+'%;background:'+(isDone?'var(--green)':r.p.color)+';opacity:'+(isDone?.9:.6)+';border-radius:2px;"></div>'
+            +(isDone?'<div style="position:absolute;right:3px;top:0;bottom:0;display:flex;align-items:center;font-size:8px;color:white;font-weight:700;font-family:var(--mono);">✓'+pb+'mo</div>':'')
+          +'</div>'
+          +'<div style="width:36px;text-align:right;font-size:8px;font-family:var(--mono);color:var(--text3);flex-shrink:0;">'+Math.round(sens)+'ea</div>'
+          +'<div style="width:54px;text-align:right;font-size:9px;font-family:var(--mono);color:var(--green);font-weight:600;flex-shrink:0;">'+fMs(m)+'</div>'
+          +'<div style="width:28px;text-align:right;font-size:8px;font-family:var(--mono);color:'+(cumPct>=100?'var(--green)':'var(--text3)')+';font-weight:'+(cumPct>=100?'700':'400')+';flex-shrink:0;">'+Math.min(999,Math.round(cumPct))+'%</div>'
+          +'</div>';
+      }).join('');
+
+      const planMeta=tx('planMeta').replace('%i',r.idx+1).replace('%m',MO2[r.sm]).replace('%u',r.units);
+
+      return '<div class="plan-roi-card" style="display:flex;flex-direction:column;">'
+        // ── Header ──
+        +'<div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--s1);border-bottom:1px solid var(--border);">'
+          +'<div style="width:9px;height:9px;border-radius:50%;background:'+r.p.color+';flex-shrink:0;"></div>'
+          +'<div style="font-size:13px;font-weight:700;">'+r.p.name+'</div>'
+          +yieldTag
+          +'<div style="font-size:9px;color:var(--text3);font-family:var(--mono);margin-left:2px;">'+planMeta+'</div>'
+          +'<div style="margin-left:auto;text-align:right;">'
+            +'<div style="font-size:8px;color:var(--text3);font-weight:700;letter-spacing:.6px;text-transform:uppercase;">'+(isKo?'장비 투자금':tx('investLabel'))+'</div>'
+            +'<div style="font-family:var(--mono);font-size:13px;font-weight:800;color:var(--red);">'+fM(r.invest)+'</div>'
+          +'</div>'
+        +'</div>'
+        // ── Payback headline ──
+        +'<div style="display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid var(--border);background:white;">'
+          +'<div style="text-align:center;flex-shrink:0;">'
+            +'<div style="font-family:var(--mono);font-size:32px;font-weight:800;line-height:1;color:'+pbColor+'">'+(pb!==null?pb:'—')+'</div>'
+            +'<div style="font-size:9px;font-weight:600;color:var(--text2);">'+(pb!==null?tx('pbUnit'):tx('pbNone'))+'</div>'
+          +'</div>'
+          +'<div style="flex:1;">'
+            +'<div style="font-size:10px;color:var(--text3);margin-bottom:5px;">'+pbEq+'</div>'
+            +'<div style="display:flex;gap:8px;margin-top:6px;">'
+              // Monthly recovery %
+              +'<div style="flex:1;background:var(--s1);border-radius:6px;padding:5px 8px;">'
+                +'<div style="font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:2px;">'+(isKo?'월 투자 회수액':'Monthly Recovery')+'</div>'
+                +'<div style="font-family:var(--mono);font-size:13px;font-weight:800;color:var(--green);">'+monthlyRecovPct+'%</div>'
+                +'<div style="font-size:8px;color:var(--text3);font-family:var(--mono);">'+(isKo?'투자금의 매월 회수분':'of invest per month')+'</div>'
+              +'</div>'
+              // 5yr net profit
+              +'<div style="flex:1;background:var(--s1);border-radius:6px;padding:5px 8px;">'
+                +'<div style="font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:2px;">'+(isKo?'5년 순이익':'5-yr Net Profit')+'</div>'
+                +'<div style="font-family:var(--mono);font-size:13px;font-weight:800;color:'+(net5>=0?'var(--green)':'var(--red)')+';">'+fM(net5)+'</div>'
+                +'<div style="font-size:8px;color:var(--text3);font-family:var(--mono);">'+(isKo?'회수 후 남는 순익':'margin − device cost')+'</div>'
+              +'</div>'
+            +'</div>'
+          +'</div>'
+          +'<div style="font-size:22px;flex-shrink:0;">'+icon+'</div>'
+        +'</div>'
+        // ── Sensor yield table ──
+        +'<div style="border-bottom:1px solid var(--border);">'
+          +'<div style="padding:6px 14px 4px;font-size:8px;font-weight:700;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;">'
+            +(isKo?'신규 설치분 센서 수량 / 매출 / 원가 / 마진 (월 기준)':'New Install · Sensors / Revenue / COGS / Margin per Month')
+          +'</div>'
+          +sensorTable
+        +'</div>'
+        // ── 5yr timeline ──
+        +'<div style="padding:8px 14px;">'
+          +'<div style="display:flex;gap:8px;font-size:8px;color:var(--text3);font-family:var(--mono);margin-bottom:5px;justify-content:flex-end;">'
+            +'<span>'+(isKo?'연도':'yr')+'</span>'
+            +'<span style="width:36px;text-align:right;">'+(isKo?'센서수':'sens')+'</span>'
+            +'<span style="width:54px;text-align:right;">'+(isKo?'순마진':'margin')+'</span>'
+            +'<span style="width:28px;text-align:right;">'+(isKo?'누적%':'cum%')+'</span>'
+          +'</div>'
+          +tl
+        +'</div>'
+      +'</div>';
+    }).join('')
+  +'</div>';
+}
+
+function drawChart(){
+  if(!roiData||!roiData.length)return;
+  const svg=document.getElementById('roi-svg');
+  const selVal=document.getElementById('chart-sel').value;
+  const data=selVal==='all'?roiData:roiData.filter(r=>r.pid===selVal);
+  if(!data.length){svg.innerHTML='';return;}
+  // Aggregate cumulative margin (for payback) and revenue (secondary)
+  const cumMargin=new Array(N).fill(0);
+  const cumRev=new Array(N).fill(0);
+  data.forEach(r=>{
+    r.cumMarginArr.forEach((v,i)=>cumMargin[i]+=v);
+    r.cumRevArr.forEach((v,i)=>cumRev[i]+=v);
+  });
+  const totalInvest=data.reduce((s,r)=>s+r.invest,0);
+  let crossIdx=null;
+  for(let i=0;i<N;i++){if(cumMargin[i]>=totalInvest){crossIdx=i;break;}}
+  const W=1100,H=320,P={t:30,r:24,b:50,l:96};
+  const cW=W-P.l-P.r,cH=H-P.t-P.b;
+  const maxV=Math.max(...cumRev,...cumMargin,totalInvest*1.05,1);
+  const xOf=i=>P.l+i*(cW/(N-1));
+  const yOf=v=>P.t+cH-(v/maxV)*cH;
+  const yi=yOf(totalInvest);
+  let o='<rect width="'+W+'" height="'+H+'" fill="#fafbfc"/>';
+  for(let t=0;t<=4;t++){
+    const v=maxV*t/4,y=yOf(v);
+    o+='<line x1="'+P.l+'" y1="'+y+'" x2="'+(W-P.r)+'" y2="'+y+'" stroke="#eef0f5" stroke-width="1"/>';
+    o+='<text x="'+(P.l-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="9.5" fill="#9090b0" font-family="JetBrains Mono,monospace">'+fMs(v)+'</text>';
+  }
+  for(let yr=1;yr<5;yr++){
+    const x=xOf(yr*12);
+    o+='<line x1="'+x+'" y1="'+P.t+'" x2="'+x+'" y2="'+(H-P.b)+'" stroke="#dde0ea" stroke-width="1"/>';
+    o+='<text x="'+(x+3)+'" y="'+(P.t+12)+'" font-size="9" fill="#3b5bdb" font-family="JetBrains Mono,monospace" opacity=".7">'+(2026+yr)+'</text>';
+  }
+  for(let i=0;i<N;i+=6){
+    o+='<text x="'+xOf(i)+'" y="'+(H-P.b+16)+'" text-anchor="middle" font-size="8.5" fill="#9090b0" font-family="JetBrains Mono,monospace">'+MO2[i]+'</text>';
+  }
+  if(crossIdx!==null){
+    const cx=xOf(crossIdx);
+    o+='<rect x="'+P.l+'" y="'+P.t+'" width="'+(cx-P.l)+'" height="'+cH+'" fill="rgba(220,38,38,.04)"/>';
+    o+='<rect x="'+cx+'" y="'+P.t+'" width="'+(W-P.r-cx)+'" height="'+cH+'" fill="rgba(22,163,74,.05)"/>';
+  }
+  // Revenue area (faint — secondary reference)
+  const aPath='M '+xOf(0)+','+(P.t+cH)+' '+cumRev.map((v,i)=>'L'+xOf(i).toFixed(1)+','+yOf(v).toFixed(1)).join(' ')+' L'+xOf(N-1)+','+(P.t+cH)+' Z';
+  o+='<path d="'+aPath+'" fill="rgba(59,130,246,.07)" stroke="none"/>';
+  const rLine=cumRev.map((v,i)=>(i===0?'M':'L')+xOf(i).toFixed(1)+','+yOf(v).toFixed(1)).join(' ');
+  o+='<path d="'+rLine+'" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3" opacity=".5"/>';
+  // Margin area (solid — primary for payback)
+  const maPath='M '+xOf(0)+','+(P.t+cH)+' '+cumMargin.map((v,i)=>'L'+xOf(i).toFixed(1)+','+yOf(v).toFixed(1)).join(' ')+' L'+xOf(N-1)+','+(P.t+cH)+' Z';
+  o+='<path d="'+maPath+'" fill="rgba(22,163,74,.12)" stroke="none"/>';
+  const mLine=cumMargin.map((v,i)=>(i===0?'M':'L')+xOf(i).toFixed(1)+','+yOf(v).toFixed(1)).join(' ');
+  o+='<path d="'+mLine+'" fill="none" stroke="#16a34a" stroke-width="2.5"/>';
+  // Investment line
+  if(totalInvest>0){
+    o+='<line x1="'+P.l+'" y1="'+yi+'" x2="'+(W-P.r)+'" y2="'+yi+'" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4" opacity=".8"/>';
+    o+='<rect x="'+(P.l+6)+'" y="'+(yi-18)+'" width="135" height="17" rx="3" fill="rgba(220,38,38,.08)"/>';
+    o+='<text x="'+(P.l+12)+'" y="'+(yi-5)+'" font-size="9.5" fill="#dc2626" font-family="JetBrains Mono,monospace" font-weight="700">'+tx('invLine')+fMs(totalInvest)+'</text>';
+  }
+  // Payback crosspoint (margin line crosses investment)
+  if(crossIdx!==null){
+    const cx=xOf(crossIdx);
+    o+='<line x1="'+cx+'" y1="'+P.t+'" x2="'+cx+'" y2="'+(H-P.b)+'" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="5,3"/>';
+    o+='<circle cx="'+cx+'" cy="'+yi+'" r="6" fill="#16a34a" stroke="white" stroke-width="2.5"/>';
+    const lw=130,lxA=cx+10+lw>W-P.r?cx-lw-10:cx+10;
+    o+='<rect x="'+lxA+'" y="'+(yi-20)+'" width="'+lw+'" height="20" rx="5" fill="#16a34a"/>';
+    o+='<text x="'+(lxA+lw/2)+'" y="'+(yi-6)+'" text-anchor="middle" font-size="10" fill="white" font-family="JetBrains Mono,monospace" font-weight="700">'+tx('paybackLabel').replace('%m',crossIdx)+'</text>';
+  }
+  // End dot on margin line
+  const lx=xOf(N-1),ly=yOf(cumMargin[N-1]);
+  o+='<circle cx="'+lx+'" cy="'+ly+'" r="4" fill="#16a34a" stroke="white" stroke-width="2"/>';
+  o+='<text x="'+(lx-4)+'" y="'+(ly-8)+'" text-anchor="end" font-size="9" fill="#16a34a" font-family="JetBrains Mono,monospace" font-weight="700">'+fMs(cumMargin[N-1])+'</text>';
+  svg.innerHTML=o;
+}
+
+function renderTable(){
+  const hdrs=[tx('thProd'),tx('thPlan'),tx('thStart'),tx('thUnits'),tx('thInvest'),
+    '2026 '+tx('lblYrRev'),'2026 '+tx('lblYrMargin'),
+    '2027 '+tx('lblYrRev'),'2027 '+tx('lblYrMargin'),
+    '2028+','5Y '+tx('thTotal'),tx('thPayback')];
+  let html='<thead><tr>'+hdrs.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>';
+  roiData.forEach(r=>{
+    const pb=r.paybackMonth;
+    const pbC=pb===null?'var(--text3)':pb<12?'var(--green)':pb<24?'var(--amber)':'var(--red)';
+    html+='<tr>'
+      +'<td><div class="td-prod"><div class="td-dot" style="background:'+r.p.color+'"></div>'+r.p.name+'</div></td>'
+      +'<td style="color:var(--text3)">#'+(r.idx+1)+'</td>'
+      +'<td>'+MO2[r.sm]+'</td>'
+      +'<td style="font-weight:700">'+r.units+tx('units')+'</td>'
+      +'<td style="color:var(--red);font-weight:600">'+fM(r.invest)+'</td>'
+      +'<td style="color:var(--blue)">'+fM(r.yrRev[0])+'</td>'
+      +'<td style="color:var(--green)">'+fM(r.yrMargin[0])+'</td>'
+      +'<td style="color:var(--blue)">'+fM(r.yrRev[1])+'</td>'
+      +'<td style="color:var(--green)">'+fM(r.yrMargin[1])+'</td>'
+      +'<td style="color:var(--text3);font-size:10px;">'+fMs(r.yrRev[2])+'~'+fMs(r.yrRev[4])+'</td>'
+      +'<td style="font-weight:700">'+fM(r.total5Rev)+'<br><span style="color:var(--green);font-size:10px;">'+fM(r.total5Margin)+'</span></td>'
+      +'<td style="color:'+pbC+';font-weight:700">'+(pb===null?'>60'+tx('months'):pb+tx('months'))+'</td>'
+      +'</tr>';
+  });
+  html+='</tbody>';
+  document.getElementById('detail-table').innerHTML=html;
+}
+
+// INIT — constants defined above, safe to call
+renderCostInputs();
+setCur('krw');
+setLang('en');
+</script>
+</body>
+</html>

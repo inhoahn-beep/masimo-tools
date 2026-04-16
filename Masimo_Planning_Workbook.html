@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+  const PW = "masimowinsall";
+  const KEY = "mwins_auth";
+  function showLock(){
+    document.documentElement.style.overflow="hidden";
+    const overlay = document.createElement("div");
+    overlay.id="pw-overlay";
+    overlay.style.cssText="position:fixed;inset:0;background:#14172a;display:flex;align-items:center;justify-content:center;z-index:99999;font-family:Inter,sans-serif;";
+    overlay.innerHTML=`<div style="background:#1e2235;border:1px solid #2d3452;border-radius:16px;padding:40px 48px;text-align:center;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+      <div style="width:52px;height:52px;background:#3b5bdb;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+        <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M12 1a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2h-2V6a5 5 0 0 0-5-5zm0 2a3 3 0 0 1 3 3v3H9V6a3 3 0 0 1 3-3zm0 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
+      </div>
+      <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;">Masimo Planning Workbook</div>
+      <div style="font-size:12px;color:#8892ac;margin-bottom:28px;">Enter password to continue</div>
+      <input id="pw-input" type="password" placeholder="Password" style="width:100%;padding:12px 16px;border:1.5px solid #2d3452;border-radius:8px;background:#14172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box;margin-bottom:12px;" />
+      <div id="pw-error" style="color:#fa5252;font-size:12px;margin-bottom:10px;min-height:16px;"></div>
+      <button id="pw-btn" style="width:100%;padding:12px;background:#3b5bdb;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Unlock</button>
+    </div>`;
+    document.body.appendChild(overlay);
+    document.getElementById("pw-input").focus();
+    function tryUnlock(){
+      const val = document.getElementById("pw-input").value;
+      if(val === PW){
+        sessionStorage.setItem(KEY,"1");
+        overlay.remove();
+        document.documentElement.style.overflow="";
+      } else {
+        document.getElementById("pw-error").textContent="Incorrect password. Try again.";
+        document.getElementById("pw-input").value="";
+        document.getElementById("pw-input").focus();
+      }
+    }
+    document.getElementById("pw-btn").onclick = tryUnlock;
+    document.getElementById("pw-input").onkeydown = function(e){ if(e.key==="Enter") tryUnlock(); };
+  }
+  if(sessionStorage.getItem(KEY)!=="1"){
+    document.addEventListener("DOMContentLoaded", showLock);
+  }
+})();
+</script>
+<title>Revenue Workbook 2026–2027</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f4f8; --white:#fff; --border:#e2e6f0; --border2:#bdc5d8;
+  --text:#14172a; --text2:#404e6a; --muted:#8892ac;
+  --accent:#3b5bdb; --accent-l:#edf2ff; --accent-d:#2f4ac4;
+  --SedLine:#c92a2a; --SedLine-l:#fff5f5;
+  --O3:#2b8a3e;     --O3-l:#ebfbee;
+  --PVi:#1864ab;    --PVi-l:#e7f5ff;
+  --SpHb:#e67700;
+  --r:10px; --sh:0 1px 4px rgba(0,0,0,.07); --sh2:0 4px 16px rgba(0,0,0,.11);
+  --mono:'DM Mono',monospace; --sans:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh;}
+.wrap{max-width:1200px;margin:0 auto;padding:22px 18px 80px;}
+
+/* HEADER */
+header{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:13px 20px;margin-bottom:18px;box-shadow:var(--sh);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.hd-brand{display:flex;align-items:center;gap:10px;}
+.hd-logo{width:32px;height:32px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.hd-logo svg{width:16px;height:16px;fill:white;}
+.hd-t{font-size:14px;font-weight:700;}
+.hd-s{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:1px;}
+.hd-badge{background:var(--accent-l);color:var(--accent);border-radius:5px;padding:3px 10px;font-family:var(--mono);font-size:11px;font-weight:600;}
+
+/* ASP CHIPS */
+.asp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.asp-inp-wrap{display:flex;align-items:center;gap:6px;}
+.asp-inp-wrap input{width:108px;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--mono);font-size:13px;font-weight:700;background:var(--bg);outline:none;text-align:right;}
+.asp-inp-wrap input:focus{border-color:var(--accent);background:var(--accent-l);}
+
+/* PRODUCT TABS */
+.prod-tabs{display:flex;gap:5px;}
+.ptab{padding:7px 18px;border-radius:8px 8px 0 0;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);border-bottom:none;background:var(--bg);color:var(--muted);font-family:var(--mono);transition:all .15s;}
+.ptab:hover{background:var(--white);color:var(--text);}
+.ptab.active[data-p="SedLine"]{background:var(--SedLine);color:#fff;border-color:var(--SedLine);}
+.ptab.active[data-p="O3"]    {background:var(--O3);    color:#fff;border-color:var(--O3);}
+.ptab.active[data-p="PVi"]   {background:var(--PVi);   color:#fff;border-color:var(--PVi);}
+.ptab.active[data-p="SpHb"]  {background:var(--SpHb);  color:#fff;border-color:var(--SpHb);}
+.ppanel{display:none;}
+.ppanel.active{display:block;}
+.pcard{background:var(--white);border:1px solid var(--border);border-radius:0 var(--r) var(--r) var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:16px;}
+
+/* SECTION HEAD */
+.sh{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+
+/* CURRENT INSTALL INPUTS */
+.cur-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
+.ibox{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:11px 12px;transition:border-color .15s,background .15s;}
+.ibox:focus-within{border-color:var(--accent);background:var(--accent-l);}
+.ilbl{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
+.ilbl .tip{font-size:9px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;}
+.ibox input[type=number]{width:100%;border:none;background:transparent;font-family:var(--mono);font-size:20px;font-weight:700;color:var(--text);outline:none;}
+.ibox input::placeholder{color:var(--muted);font-weight:400;font-size:14px;}
+.iunit{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:2px;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:16px 0;}
+
+/* PLAN ROWS */
+.plans-outer{display:flex;flex-direction:column;gap:8px;}
+.plan-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;display:grid;grid-template-columns:22px 1fr 1fr 1fr 22px;gap:10px;align-items:start;}
+.pnum{font-family:var(--mono);font-size:10px;color:var(--muted);font-weight:700;padding-top:18px;text-align:center;}
+.pdel{padding-top:18px;text-align:center;}
+.pdel button{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;border-radius:3px;padding:2px;}
+.pdel button:hover{color:var(--SedLine);}
+.pinp{display:flex;flex-direction:column;gap:4px;}
+.pinp label{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;}
+.pinp input,.pinp select{width:100%;padding:7px 9px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--mono);font-size:13px;background:white;outline:none;transition:border-color .15s;}
+.pinp input:focus,.pinp select:focus{border-color:var(--accent);}
+.pinp .hint{font-size:9px;color:var(--muted);font-family:var(--mono);margin-top:1px;line-height:1.4;}
+.add-btn{width:100%;padding:9px;background:transparent;border:1.5px dashed var(--border2);border-radius:8px;color:var(--muted);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.add-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-l);}
+
+/* CALCULATE BUTTON */
+.calc-btn-wrap{display:flex;justify-content:center;margin:22px 0 8px;}
+.calc-btn{display:flex;align-items:center;gap:10px;padding:14px 44px;background:linear-gradient(135deg,#c92a2a 0%,#a82020 100%);color:white;border:none;border-radius:12px;font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.5px;cursor:pointer;box-shadow:0 4px 16px rgba(201,42,42,.35);transition:all .2s;}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,42,42,.45);}
+.calc-btn:active{transform:translateY(0);}
+.calc-btn svg{width:18px;height:18px;fill:white;}
+
+/* RESULT SECTION */
+.result-section{display:none;}
+.result-section.visible{display:block;animation:fadeUp .4s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* GROWTH BANNER */
+.growth-banner{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;}
+.gb-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 14px;box-shadow:var(--sh);}
+.gb-lbl{font-size:10px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.gb-val{font-family:var(--mono);font-size:20px;font-weight:700;letter-spacing:-.5px;line-height:1;}
+.gb-sub{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:2px;}
+.positive{color:#2b8a3e;} .negative{color:#c92a2a;} .neutral{color:var(--accent);}
+
+/* QUARTERLY GROUPS — horizontal single row */
+.mo-scroll{overflow-x:auto;padding-bottom:6px;}
+.mo-row{display:flex;gap:0;align-items:stretch;min-width:max-content;}
+.qtr-block{display:flex;align-items:stretch;gap:0;}
+.qtr-divider{width:1px;background:var(--border2);margin:0 8px;flex-shrink:0;align-self:stretch;}
+.qtr-sep{display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:6px;margin:0 4px;}
+.qbadge-v{writing-mode:horizontal-tb;font-size:9px;font-weight:700;color:var(--accent);font-family:var(--mono);letter-spacing:.8px;background:var(--accent-l);border-radius:4px;padding:2px 7px;white-space:nowrap;}
+.mo-card{background:var(--white);border:1px solid var(--border);border-right:none;padding:6px 7px;min-width:58px;max-width:72px;cursor:default;position:relative;transition:background .12s;}
+.mo-card:first-child{border-radius:7px 0 0 7px;}
+.mo-card:last-child{border-right:1px solid var(--border);border-radius:0 7px 7px 0;}
+.mo-card:hover{background:#f0f4ff;z-index:2;}
+.mo-card.fy-last{border-color:var(--accent);}
+.mo-name{font-family:var(--mono);font-size:8px;font-weight:700;color:var(--text2);letter-spacing:.5px;margin-bottom:3px;}
+.mo-qty{font-family:var(--mono);font-size:13px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.3px;}
+.mo-rev{font-family:var(--mono);font-size:9px;color:var(--text);font-weight:600;margin-top:1px;}
+.mo-bar-wrap{height:2px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden;}
+.mo-bar-base{height:100%;float:left;border-radius:2px 0 0 2px;}
+.mo-bar-new{height:100%;float:left;}
+.qtr-sum{background:var(--accent-l);border:1px solid rgba(59,91,219,.2);border-radius:7px;padding:7px 9px;min-width:88px;max-width:96px;display:flex;flex-direction:column;justify-content:center;margin-left:3px;flex-shrink:0;}
+.qtr-sum-lbl{font-size:8px;font-weight:700;color:var(--accent);letter-spacing:.5px;text-transform:uppercase;font-family:var(--mono);margin-bottom:2px;}
+.qtr-sum-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent);line-height:1;}
+.qtr-sum-sub{font-size:8px;color:var(--accent);font-family:var(--mono);margin-top:1px;opacity:.7;}
+
+/* CARD HOVER TOOLTIP */
+.card-tt{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:white;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-family:var(--mono);font-size:10px;box-shadow:var(--sh2);pointer-events:none;z-index:20;min-width:170px;white-space:nowrap;}
+.card-tt::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--border);}
+.mo-card:hover .card-tt{display:block;}
+
+/* CHART */
+.chart-ctrl{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.cg{display:flex;align-items:center;gap:5px;}
+.clbl{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-right:3px;}
+.vbtn{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-family:var(--mono);transition:all .15s;}
+.vbtn:hover{border-color:var(--accent);color:var(--accent);}
+.vbtn.active{background:var(--accent);color:white;border-color:var(--accent);}
+.pfbtn{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;background:white;font-family:var(--mono);transition:all .15s;}
+.pfbtn:not(.active){opacity:.3;background:var(--bg);}
+.chart-box{position:relative;background:white;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.chart-box svg{width:100%;display:block;}
+#ctt{display:none;position:absolute;background:white;border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-family:var(--mono);font-size:11px;box-shadow:var(--sh2);pointer-events:none;z-index:10;min-width:195px;}
+.leg{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;padding-top:9px;border-top:1px solid var(--border);}
+.li{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--text2);}
+.ls{width:15px;height:7px;border-radius:2px;display:inline-block;}
+
+/* DETAIL TABLE */
+.dtbl-wrap{overflow-x:auto;margin-top:14px;}
+.dtbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;min-width:760px;}
+.dtbl th{padding:5px 7px;background:var(--bg);font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1px;border-bottom:2px solid var(--border);text-align:right;white-space:nowrap;}
+.dtbl th:first-child{text-align:left;}
+.dtbl td{padding:5px 7px;border-bottom:1px solid var(--border);text-align:right;}
+.dtbl td:first-child{text-align:left;font-weight:600;}
+.dtbl tr.sec-head td{background:var(--bg);font-weight:700;padding:6px 7px;border-top:2px solid var(--border2);}
+.dtbl tr.foot td{background:#f8f9fc;font-weight:700;border-top:2px solid var(--border2);}
+
+@media(max-width:900px){.growth-banner{grid-template-columns:repeat(2,1fr);}.cur-row{grid-template-columns:1fr 1fr;}}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  /* Layout */
+  .wrap{padding:12px 12px 60px;}
+  header{padding:10px 14px;gap:8px;flex-wrap:wrap;}
+  .hd-t{font-size:12px;}
+  .hd-s{display:none;}
+
+  /* Growth banner: 1 col on small phones */
+  .growth-banner{grid-template-columns:repeat(2,1fr);gap:8px;}
+
+  /* Current install inputs: stack vertically */
+  .cur-row{grid-template-columns:1fr!important;}
+  .ibox input[type=number]{font-size:16px!important;} /* prevent iOS zoom */
+
+  /* Plan card: stack fields */
+  .plan-card{grid-template-columns:1fr!important;gap:6px;}
+  .pnum,.pdel{display:none;}
+
+  /* pinp inputs: ensure 16px to prevent iOS zoom */
+  .pinp input,.pinp select{font-size:16px!important;}
+
+  /* ASP row: wrap chips */
+  .asp-inp-wrap{flex-wrap:wrap;}
+  .asp-inp-wrap input{width:90px;font-size:16px!important;}
+  #asp-inputs{gap:8px!important;flex-wrap:wrap;}
+
+  /* Chart: full width, shorter height */
+  .chart-box svg{min-height:200px;}
+
+  /* Monthly cards: horizontal scroll intact */
+  .mo-card{min-width:62px;padding:5px 6px;}
+
+  /* Product tabs: scroll if overflow */
+  .prod-tabs{overflow-x:auto;padding-bottom:2px;flex-wrap:nowrap;}
+  .ptab{white-space:nowrap;padding:6px 12px;}
+
+  /* Paste bar: stack */
+  #paste-bar{flex-wrap:wrap;gap:6px;}
+  #paste-input{min-width:0;flex:1 1 100%;}
+
+  /* Share toast position */
+  #share-toast{font-size:10px;}
+
+  /* Calc button */
+  .calc-btn{padding:12px 28px;font-size:14px;}
+
+  /* Year toggle */
+  #yr-toggle{flex-wrap:wrap;}
+
+  /* Detail table: keep horizontal scroll */
+  .dtbl-wrap{-webkit-overflow-scrolling:touch;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="hd-brand">
+    <div class="hd-logo"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h7v7h-7z"/></svg></div>
+    <div><div class="hd-t">Consumable Revenue Workbook</div><div class="hd-s">CONFIDENTIAL · LIMITED USE ONLY · Installation-Based Revenue Forecast</div></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <div class="hd-badge">FY2026–2030</div>
+    <button onclick="copyStateCode()" style="display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text2);font-family:var(--mono);transition:all .15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+      Copy State Code
+    </button>
+    <div id="share-toast" style="display:none;font-size:11px;font-family:var(--mono);color:var(--accent);font-weight:600;padding:4px 10px;background:var(--accent-l);border-radius:5px;">✓ State code copied!</div>
+  </div>
+</header>
+
+<!-- PASTE STATE BAR -->
+<div id="paste-bar" style="display:flex;align-items:center;gap:8px;background:#fffbeb;border:1px solid #fde68a;border-radius:var(--r);padding:10px 16px;margin-bottom:12px;flex-wrap:wrap;">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="#92400e"><path d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/></svg>
+  <span style="font-size:11px;font-weight:700;color:#92400e;font-family:var(--mono);">Received a State Code?</span>
+  <input id="paste-input" type="text" placeholder="Paste state code here…"
+    style="flex:1;min-width:200px;padding:5px 10px;border:1.5px solid #fde68a;border-radius:6px;font-family:var(--mono);font-size:12px;background:white;outline:none;">
+  <button onclick="loadPastedState()" style="padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:#92400e;color:white;font-family:var(--mono);">Load</button>
+  <button onclick="document.getElementById('paste-bar').style.display='none'" style="padding:5px 8px;border-radius:6px;font-size:11px;cursor:pointer;border:1.5px solid #fde68a;background:transparent;color:#92400e;font-family:var(--mono);">✕</button>
+</div>
+
+<!-- ASP row -->
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:white;border:1px solid var(--border);border-radius:var(--r);padding:11px 16px;margin-bottom:16px;box-shadow:var(--sh);">
+  <span style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-right:2px;">ASP</span>
+  <!-- currency toggle -->
+  <div style="display:flex;gap:2px;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:2px;margin-right:4px;">
+    <button id="asp-usd-btn" onclick="setAspCurrency('usd')" style="padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:var(--mono);background:transparent;color:var(--muted);transition:all .15s;">$ USD</button>
+    <button id="asp-krw-btn" onclick="setAspCurrency('krw')" style="padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:var(--mono);background:#1a3a1a;color:#4ade80;transition:all .15s;">₩ KRW</button>
+  </div>
+  <div id="asp-inputs" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;"></div>
+  <button onclick="resetAsp()" style="padding:3px 10px;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:var(--mono);margin-left:4px;">Reset defaults</button>
+</div>
+
+<!-- PRODUCT TABS -->
+<div class="prod-tabs" id="prod-tabs"></div>
+<div id="prod-panels"></div>
+
+<!-- CALCULATE -->
+<div class="calc-btn-wrap">
+  <button class="calc-btn" onclick="runCalc()">
+    <svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 13l-5-5 1.41-1.41L12 13.17l7.59-7.59L21 7l-9 9z"/></svg>
+    Calculate
+  </button>
+</div>
+
+<!-- RESULT -->
+<div class="result-section" id="result-section">
+
+  <div style="font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">📈 Forecast Summary</div>
+  <div class="growth-banner" id="growth-banner"></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text2);">Monthly Sensor Qty &amp; Revenue — All Products</div>
+    <div style="display:flex;gap:4px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:2px;" id="yr-toggle"></div>
+  </div>
+  <div id="monthly-section"></div>
+
+  <!-- CHART -->
+  <div class="chart-ctrl">
+    <div class="cg">
+      <span class="clbl">View</span>
+      <button class="vbtn active" id="vb-rev" onclick="setView('rev')">$ Revenue</button>
+      <button class="vbtn" id="vb-sen" onclick="setView('sen')">🔬 Sensor Qty</button>
+    </div>
+    <div class="cg" id="pf-btns"></div>
+  </div>
+  <div class="chart-box">
+    <svg id="chart-svg" viewBox="0 0 1100 320" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="ctt"></div>
+  </div>
+  <div class="leg" id="chart-leg"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;margin-bottom:6px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text2);">5-Year Detail Table</div>
+    <button onclick="exportCSV()" style="display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text2);font-family:var(--mono);transition:all .15s;" onmouseover="this.style.borderColor='#2b8a3e';this.style.color='#2b8a3e'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      Export CSV
+    </button>
+  </div>
+  <div class="dtbl-wrap"><table class="dtbl"><thead><tr id="dtbl-head"></tr></thead><tbody id="dtbl-body"></tbody></table></div>
+</div>
+
+</div>
+
+<script>
+// ════════ CONFIG ════════
+const PRODS = [
+  {id:'SpHb',    name:'SpHb',       color:'#e67700', aspKRW:57950, aspUSD:0},
+  {id:'SedLine', name:'SedLine',    color:'#c92a2a', aspKRW:24104, aspUSD:11.00},
+  {id:'O3',      name:'O3',         color:'#2b8a3e', aspKRW:50160, aspUSD:38.50},
+  {id:'PVi',     name:'SpO2 (PVi)', color:'#1864ab', aspKRW:14370, aspUSD:10.00},
+];
+const MO  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const YEARS = [2026,2027,2028,2029,2030];
+const MO2 = YEARS.flatMap(yr=>MO.map(m=>m+"'"+String(yr).slice(2)));
+const N   = 60; // 5 years × 12 months
+const QTRS = [
+  {lbl:'Q1',months:[0,1,2]},{lbl:'Q2',months:[3,4,5]},
+  {lbl:'Q3',months:[6,7,8]},{lbl:'Q4',months:[9,10,11]},
+];
+
+// ════════ STATE ════════
+const S = {};
+PRODS.forEach(p=>{
+  S[p.id]={
+    curInstall: p.id==='SpHb'?94 : p.id==='SedLine'?50 : p.id==='O3'?30 : 40,
+    curYield:   p.id==='SpHb'?16.8 : p.id==='SedLine'?14 : p.id==='O3'?10 : 10,
+    yieldGrowth:0,
+    asp: p.aspKRW/1370.2176, // default KRW→USD
+    plans:[],
+  };
+});
+
+let activeProd  = 'SedLine';
+let chartView   = 'rev';
+let chartFilter = new Set(PRODS.map(p=>p.id));
+let activeYears = new Set([2026]);
+let aspCurrency = 'krw';
+const ASP_FX    = 1370.2176;
+let computed    = null;
+const _ss=new Map();
+
+// ════════ FORMATTERS ════════
+const fUsd = v => {
+  if(!v||v<0) return '—';
+  if(aspCurrency==='krw'){
+    const w=v*ASP_FX;
+    if(w>=1e8) return '₩'+(w/1e8).toFixed(2)+'억';
+    if(w>=1e6) return '₩'+(w/1e6).toFixed(1)+'백만';
+    return '₩'+Math.round(w).toLocaleString('en-US');
+  }
+  if(v>=1e6) return '$'+(v/1e6).toFixed(3)+'M';
+  return '$'+Math.round(v).toLocaleString('en-US');
+};
+const f0   = v => v>0 ? Math.round(v).toLocaleString('en-US') : '—';
+const fGrow= v => v===null?'N/A':(v>=0?'+':'')+v.toFixed(1)+'%';
+const gCls = v => v===null?'neutral':v>=0?'positive':'negative';
+
+// ════════ ASP CONTROLS ════════
+// ── Number formatting helpers ──
+function fmtComma(v){ return Math.round(v).toLocaleString('en-US'); }
+function parseComma(s){ return parseFloat(String(s).replace(/,/g,''))||0; }
+
+function renderAspInputs(){
+  const wrap=document.getElementById('asp-inputs');
+  if(!wrap) return;
+  wrap.innerHTML=PRODS.map(p=>{
+    const usdVal=S[p.id].asp;
+    const raw=aspCurrency==='krw'?Math.round(usdVal*ASP_FX):usdVal;
+    const dispVal=aspCurrency==='krw'?fmtComma(raw):raw.toFixed(2);
+    const sym=aspCurrency==='krw'?'₩':'$';
+    return `<div class="asp-inp-wrap">
+      <span class="asp-dot" style="background:${p.color}"></span>
+      <span style="font-size:11px;font-weight:600;color:var(--text2);font-family:var(--mono)">${p.name}</span>
+      <span style="font-size:11px;color:var(--muted);">${sym}</span>
+      <input type="text" inputmode="numeric"
+        value="${dispVal}"
+        data-pid="${p.id}"
+        oninput="onAspInput(this)"
+        onblur="onAspBlur(this)">
+    </div>`;
+  }).join('');
+}
+function onAspInput(el){
+  const pid=el.dataset.pid;
+  const v=parseComma(el.value);
+  S[pid].asp = aspCurrency==='krw' ? v/ASP_FX : v;
+}
+function onAspBlur(el){
+  // reformat with commas on blur
+  const pid=el.dataset.pid;
+  const usdVal=S[pid].asp;
+  const raw=aspCurrency==='krw'?Math.round(usdVal*ASP_FX):usdVal;
+  el.value=aspCurrency==='krw'?fmtComma(raw):raw.toFixed(2);
+}
+function setAspCurrency(cur){
+  aspCurrency=cur;
+  document.getElementById('asp-usd-btn').style.background=cur==='usd'?'var(--accent)':'transparent';
+  document.getElementById('asp-usd-btn').style.color=cur==='usd'?'white':'var(--muted)';
+  document.getElementById('asp-krw-btn').style.background=cur==='krw'?'#1a3a1a':'transparent';
+  document.getElementById('asp-krw-btn').style.color=cur==='krw'?'#4ade80':'var(--muted)';
+  // Do NOT reset S[p.id].asp — preserve user/loaded values, just re-render in new unit
+  renderAspInputs();
+  if(computed){renderGrowthBanner();renderMonthlySection();renderChart();renderDetailTable();}
+}
+function resetAsp(){
+  PRODS.forEach(p=>S[p.id].asp=aspCurrency==='krw'?p.aspKRW/ASP_FX:p.aspUSD);
+  renderAspInputs();
+}
+
+// ════════ BUILD UI ════════
+function buildUI(){
+  document.getElementById('prod-tabs').innerHTML = PRODS.map(p=>
+    `<div class="ptab${p.id===activeProd?' active':''}" data-p="${p.id}" onclick="switchProd('${p.id}')">${p.name}</div>`
+  ).join('');
+
+  document.getElementById('prod-panels').innerHTML = PRODS.map(p=>`
+    <div class="ppanel${p.id===activeProd?' active':''}" id="panel-${p.id}">
+      <div class="pcard">
+        <div class="sh">① Current Installation</div>
+        <div class="cur-row">
+          <div class="ibox">
+            <div class="ilbl">Units Installed</div>
+            <input type="number" min="0" id="${p.id}-ci" value="${S[p.id].curInstall}" oninput="S['${p.id}'].curInstall=+this.value">
+            <div class="iunit">units</div>
+          </div>
+          <div class="ibox">
+            <div class="ilbl">Yield <span class="tip">(current avg)</span></div>
+            <input type="number" min="0" step="0.1" id="${p.id}-cy" value="${S[p.id].curYield}" oninput="S['${p.id}'].curYield=+this.value">
+            <div class="iunit">sensors / unit / mo</div>
+          </div>
+          <div class="ibox">
+            <div class="ilbl">Quarterly Yield Growth <span class="tip">(optional)</span></div>
+            <input type="number" min="0" step="0.1" id="${p.id}-yg" value="${S[p.id].yieldGrowth}" oninput="S['${p.id}'].yieldGrowth=+this.value">
+            <div class="iunit">% / qtr · compounds Q2→Q3→… across all 5 years</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="sh">② Installation Plans <span style="font-weight:400;color:var(--muted);font-size:9px;text-transform:none;letter-spacing:0;">(optional · auto yield ramp: 1–3mo 50% → 4–6mo 75% → 7mo+ 100%)</span></div>
+        <div class="plans-outer" id="${p.id}-plans"></div>
+        <button class="add-btn" onclick="addPlan('${p.id}')">＋ Add Installation Plan</button>
+      </div>
+    </div>`
+  ).join('');
+
+  document.getElementById('pf-btns').innerHTML = PRODS.map(p=>
+    `<button class="pfbtn active" id="pf-${p.id}"
+      style="border-color:${p.color};color:${p.color};"
+      onclick="togglePF('${p.id}',event)">${p.name}</button>`
+  ).join('');
+  renderAspInputs();
+}
+
+// ════════ PLANS ════════
+function renderPlans(pid){
+  const wrap=document.getElementById(`${pid}-plans`);
+  if(!wrap) return;
+  wrap.innerHTML = S[pid].plans.map((pl,i)=>`
+    <div class="plan-card">
+      <div class="pnum">#${i+1}</div>
+      <div class="pinp">
+        <label>Start Month</label>
+        <select onchange="S['${pid}'].plans[${i}].startMonth=+this.value">
+          ${YEARS.flatMap((yr,yi)=>MO.map((m,mi)=>`<option value="${yi*12+mi}"${pl.startMonth===yi*12+mi?' selected':''}>${m} ${yr}</option>`)).join('')}
+        </select>
+      </div>
+      <div class="pinp">
+        <label>Units</label>
+        <input type="number" min="0" value="${pl.install}" placeholder="0" oninput="S['${pid}'].plans[${i}].install=+this.value">
+        <div class="hint">cumulative from start month</div>
+      </div>
+      <div class="pinp">
+        <label>Yield <span style="color:#e67700;font-size:8px;">(manual = no ramp)</span></label>
+        <input type="number" min="0" step="0.1" value="${pl.manualYield||''}" placeholder="default = current yield"
+          oninput="S['${pid}'].plans[${i}].manualYield=this.value===''?null:+this.value">
+        <div class="hint" style="color:#2b8a3e">blank = auto ramp: 1–3mo 50% → 4–6mo 75% → 7mo+ 100%</div>
+      </div>
+      <div class="pdel"><button onclick="delPlan('${pid}',${i})">✕</button></div>
+    </div>`).join('');
+}
+
+function addPlan(pid){
+  const plans=S[pid].plans;
+  const last=plans.length?plans[plans.length-1].startMonth:-1;
+  plans.push({startMonth:Math.min(Math.max(last+1,0),N-1), install:0, manualYield:null});
+  renderPlans(pid);
+}
+function delPlan(pid,i){S[pid].plans.splice(i,1);renderPlans(pid);}
+
+// ════════ COMPUTE ════════
+function computeAll(){
+  const res={};
+  PRODS.forEach(p=>{
+    const s=S[p.id], gr=s.yieldGrowth/100;
+    const qMult=mi=>Math.pow(1+gr,Math.floor(mi/3));
+    const layers=[];
+    // Base — also track effective units for yield calc
+    const aS=Array.from({length:N},(_,mi)=>s.curInstall*s.curYield*qMult(mi));
+    const asp=S[p.id].asp;
+    const baseUnits=Array.from({length:N},()=>s.curInstall);
+    layers.push({label:'Base (Current)', sensor:aS, rev:aS.map(v=>v*asp)});
+    // Plans
+    const planUnitsArr=new Array(N).fill(0);
+    s.plans.forEach((pl,pi)=>{
+      if(!pl.install) return;
+      const bY=pl.manualYield!==null?pl.manualYield:s.curYield;
+      const manual=pl.manualYield!==null;
+      const sm=pl.startMonth;
+      const pS=Array.from({length:N},(_,mi)=>{
+        if(mi<sm) return 0;
+        const age=mi-sm;
+        const ramp=manual?1:(age<=2?.5:age<=5?.75:1);
+        return pl.install*bY*ramp*qMult(mi);
+      });
+      // effective units = install * ramp (for yield denominator)
+      for(let mi=sm;mi<N;mi++){
+        const age=mi-sm;
+        const ramp=manual?1:(age<=2?.5:age<=5?.75:1);
+        planUnitsArr[mi]+=pl.install*ramp;
+      }
+      layers.push({label:`Plan #${pi+1} (+${pl.install}u, ${MO2[sm]}~)`, sensor:pS, rev:pS.map(v=>v*asp)});
+    });
+    // totalUnits[mi] = base units + effective plan units
+    const totalUnits=Array.from({length:N},(_,mi)=>baseUnits[mi]+planUnitsArr[mi]);
+    res[p.id]=layers;
+    res[p.id]._units=totalUnits; // attach for yield calc
+  });
+  return res;
+}
+
+// ════════ RUN CALC ════════
+function runCalc(){
+  PRODS.forEach(p=>{
+    const ci=document.getElementById(`${p.id}-ci`);
+    const cy=document.getElementById(`${p.id}-cy`);
+    const yg=document.getElementById(`${p.id}-yg`);
+    if(ci) S[p.id].curInstall=+ci.value||0;
+    if(cy) S[p.id].curYield=+cy.value||0;
+    if(yg) S[p.id].yieldGrowth=+yg.value||0;
+    // ASP already synced live via onAspInput
+  });
+  computed=computeAll();
+  const rs=document.getElementById('result-section');
+  rs.classList.add('visible'); rs.style.display='block';
+  setTimeout(()=>rs.scrollIntoView({behavior:'smooth',block:'start'}),50);
+  renderGrowthBanner();
+  syncBannerHighlight();
+  renderMonthlySection();
+  renderChart();
+  renderDetailTable();
+}
+
+// ════════ GROWTH BANNER ════════
+function renderGrowthBanner(){
+  if(!computed) return;
+  // Use first selected year as primary display year
+  const selYrsSorted=[...activeYears].sort((a,b)=>a-b);
+  const primaryYr=selYrsSorted[0];
+  const primaryYi=YEARS.indexOf(primaryYr);
+
+  const items=PRODS.map(p=>{
+    const layers=computed[p.id];
+    const fyRevs=YEARS.map((_,yi)=>{
+      const s=new Array(12).fill(0);
+      layers.forEach(l=>l.rev.slice(yi*12,yi*12+12).forEach((v,i)=>s[i]+=v));
+      return s.reduce((a,b)=>a+b,0);
+    });
+    // Growth within the primary selected year (Jan→Dec)
+    const growthPrimary=(()=>{
+      const s=new Array(12).fill(0);
+      layers.forEach(l=>l.rev.slice(primaryYi*12,primaryYi*12+12).forEach((v,i)=>s[i]+=v));
+      return s[0]>0?(s[11]-s[0])/s[0]*100:null;
+    })();
+    return {p, fyRevs, growthPrimary};
+  });
+
+  // Total per year
+  const totalRevs=YEARS.map((_,yi)=>items.reduce((s,it)=>s+it.fyRevs[yi],0));
+
+  // Build year-on-year rows — only show non-primary years as sub-rows
+  function yrRows(rv){
+    return YEARS.slice(1).map(function(yr,i){
+      var yoy=rv[i]>0?(rv[i+1]-rv[i])/rv[i]*100:null;
+      // Highlight if this year is selected
+      const isSel=activeYears.has(yr);
+      return '<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;'+(isSel?'font-weight:700;color:var(--text);':'opacity:.6;')+'">'
+        +'<span>'+yr+'</span>'
+        +'<span>'+fUsd(rv[i+1])+' <span class="'+gCls(yoy)+'" style="font-size:9px;">'+fGrow(yoy)+'</span></span>'
+        +'</div>';
+    }).join('');
+  }
+  document.getElementById('growth-banner').innerHTML=
+    items.map(function(it){
+      var p=it.p, fyRevs=it.fyRevs, growthPrimary=it.growthPrimary;
+      return '<div class="gb-card" id="gbc-'+p.id+'"'
+        +' style="border-top:3px solid '+p.color+';cursor:pointer;transition:opacity .15s,box-shadow .15s;"'
+        +' onclick="togglePF(\''+p.id+'\',event)">'
+        +'<div class="gb-lbl">'+p.name+'</div>'
+        +'<div class="gb-val" style="color:'+p.color+'">'+fUsd(fyRevs[primaryYi])+'</div>'
+        +'<div class="gb-sub">FY'+primaryYr+' · Jan→Dec <span class="'+gCls(growthPrimary)+'">'+fGrow(growthPrimary)+'</span></div>'
+        +'<div style="margin-top:7px;display:flex;flex-direction:column;gap:2px;">'+yrRows(fyRevs)+'</div>'
+        +'</div>';
+    }).join('')
+    +'<div class="gb-card" id="gbc-total" style="border-top:3px solid var(--text);transition:opacity .15s;">'
+    +'<div class="gb-lbl">Total All Products</div>'
+    +'<div class="gb-val">'+fUsd(totalRevs[primaryYi])+'</div>'
+    +'<div class="gb-sub">FY'+primaryYr+' Revenue</div>'
+    +'<div style="margin-top:7px;display:flex;flex-direction:column;gap:2px;">'+yrRows(totalRevs)+'</div>'
+    +'</div>';
+}
+
+// ════════ YEAR TOGGLE ════════
+function buildYearToggle(){
+  const el=document.getElementById('yr-toggle');
+  if(!el) return;
+  el.innerHTML=YEARS.map(yr=>{
+    const on=activeYears.has(yr);
+    return '<button onclick="toggleActiveYear('+yr+',event)" id="ytb-'+yr+'"'
+      +' title="Click: solo · Ctrl+Click: add/remove"'
+      +' style="padding:4px 11px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:var(--mono);transition:all .15s;'
+      +'background:'+(on?'var(--accent)':'transparent')+';color:'+(on?'white':'var(--muted)')+';">'+yr+'</button>';
+  }).join('');
+}
+function toggleActiveYear(yr,event){
+  if(event&&(event.ctrlKey||event.metaKey)){
+    if(activeYears.has(yr)){if(activeYears.size===1)return;activeYears.delete(yr);}
+    else activeYears.add(yr);
+  } else {
+    if(activeYears.size===1&&activeYears.has(yr)){YEARS.forEach(y=>activeYears.add(y));}
+    else{activeYears.clear();activeYears.add(yr);}
+  }
+  buildYearToggle();
+  renderMonthlySection();
+  renderChart();
+  renderGrowthBanner();
+  syncBannerHighlight();
+}
+
+// ════════ MONTHLY SECTION (horizontal, quarterly grouped) ════════
+function renderMonthlySection(){
+  if(!computed) return;
+  buildYearToggle();
+
+  // Build per-month base & new totals (all products) for all 60 months
+  const totBaseSen=new Array(N).fill(0), totBaseRev=new Array(N).fill(0);
+  const totNewSen=new Array(N).fill(0),  totNewRev=new Array(N).fill(0);
+  const totUnits=new Array(N).fill(0);
+  PRODS.forEach(p=>{
+    if(!chartFilter.has(p.id)) return;  // respect product filter
+    computed[p.id].forEach((l,li)=>{
+      const isSen=l.sensor, isRev=l.rev;
+      if(li===0){
+        isSen.forEach((v,i)=>totBaseSen[i]+=v);
+        isRev.forEach((v,i)=>totBaseRev[i]+=v);
+      } else {
+        isSen.forEach((v,i)=>totNewSen[i]+=v);
+        isRev.forEach((v,i)=>totNewRev[i]+=v);
+      }
+    });
+    if(computed[p.id]._units) computed[p.id]._units.forEach((v,i)=>totUnits[i]+=v);
+  });
+  const totSen=totBaseSen.map((v,i)=>v+totNewSen[i]);
+  const totRev=totBaseRev.map((v,i)=>v+totNewRev[i]);
+  // Effective yield = total sensors / total units per month
+  const totYield=totSen.map((s,i)=>totUnits[i]>0?s/totUnits[i]:0);
+
+  function buildYear(yr, offset){
+    const maxR=Math.max(...totRev.slice(offset,offset+12), 1);
+    const fyS=totSen.slice(offset,offset+12).reduce((a,b)=>a+b,0);
+    const fyR=totRev.slice(offset,offset+12).reduce((a,b)=>a+b,0);
+    const fyNewR=totNewRev.slice(offset,offset+12).reduce((a,b)=>a+b,0);
+    const fyNewPct=fyR>0?(fyNewR/fyR*100):0;
+
+    // Build one horizontal row with Q blocks
+    const qBlocks = QTRS.map((q,qi)=>{
+      const cards = q.months.map(j=>{
+        const i=offset+j;
+        const barTot=maxR>0?Math.round(totRev[i]/maxR*100):0;
+        const barBase=totRev[i]>0?Math.round(totBaseRev[i]/totRev[i]*100):100;
+        const newRevI=totNewRev[i], baseRevI=totBaseRev[i];
+        const newPct=totRev[i]>0?(newRevI/totRev[i]*100).toFixed(1):0;
+        const isLast=offset+j===offset+11;
+        const yieldI=totYield[i];
+        return `<div class="mo-card${isLast?' fy-last':''}">
+          <div class="mo-name">${MO[j]}</div>
+          <div class="mo-qty">${f0(totSen[i])}<span style="font-size:8px;color:var(--text2);font-weight:600;"> ea</span></div>
+          <div class="mo-rev">${fUsd(totRev[i])}</div>
+          <div class="mo-rev" style="color:#7c5c00;font-size:8px;">Y: ${yieldI>0?yieldI.toFixed(1):'—'}</div>
+          <div class="mo-bar-wrap">
+            <div class="mo-bar-base" style="width:${barBase*barTot/100}%;background:var(--accent);opacity:.6;"></div>
+            <div class="mo-bar-new"  style="width:${(100-barBase)*barTot/100}%;background:#e67700;opacity:.8;"></div>
+          </div>
+          <div class="card-tt">
+            <div style="font-weight:700;margin-bottom:6px;">${MO[j]} ${yr}</div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:2px 0;">
+              <span style="color:var(--muted);">Total Sensors</span><span style="font-weight:600;">${f0(totSen[i])}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:2px 0;">
+              <span style="color:var(--muted);">Total Revenue</span><span style="font-weight:600;">${fUsd(totRev[i])}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:2px 0;">
+              <span style="color:var(--muted);">Eff. Yield/Unit</span><span style="font-weight:600;color:#7c5c00;">${yieldI>0?yieldI.toFixed(2):'—'}</span>
+            </div>
+            <div style="height:1px;background:var(--border);margin:5px 0;"></div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:2px 0;">
+              <span style="display:flex;align-items:center;gap:4px;color:var(--muted);"><span style="width:7px;height:7px;background:var(--accent);border-radius:2px;display:inline-block;opacity:.6"></span>Base</span>
+              <span style="font-weight:600;">${fUsd(baseRevI)} <span style="color:var(--muted);font-weight:400;">(${totRev[i]>0?(100-+newPct).toFixed(1):100}%)</span></span>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:2px 0;">
+              <span style="display:flex;align-items:center;gap:4px;color:#92400e;"><span style="width:7px;height:7px;background:#e67700;border-radius:2px;display:inline-block;opacity:.8"></span>New Install</span>
+              <span style="font-weight:600;color:${newRevI>0?'#92400e':'var(--muted)'};">${newRevI>0?fUsd(newRevI)+' <span style="font-weight:400;">('+newPct+'%)</span>':'—'}</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      const qSen=q.months.reduce((a,j)=>a+totSen[offset+j],0);
+      const qRev=q.months.reduce((a,j)=>a+totRev[offset+j],0);
+      const qNewRev=q.months.reduce((a,j)=>a+totNewRev[offset+j],0);
+      const qNewPct=qRev>0?(qNewRev/qRev*100).toFixed(1):0;
+
+      const qDiv=qi>0?'<div style="width:1px;background:var(--border2);margin:0 5px;flex-shrink:0;align-self:stretch;"></div>':'';
+      const qNw=qNewRev>0?('<div style="margin-top:5px;padding-top:5px;border-top:1px solid rgba(59,91,219,.15);font-size:9px;font-family:var(--mono);color:#92400e;font-weight:600;">+New: '+fUsd(qNewRev)+'<br><span style="opacity:.8">'+qNewPct+'% of total</span></div>'):'';
+      return '<div style="display:flex;align-items:stretch;gap:0;">'+qDiv
+        +'<div>'
+        +'<div style="font-size:8px;font-weight:700;color:var(--accent);font-family:var(--mono);letter-spacing:.5px;background:var(--accent-l);border-radius:4px;padding:1px 6px;display:inline-block;margin-bottom:4px;">'+q.lbl+'</div>'
+        +'<div style="display:flex;gap:0;align-items:stretch;">'
+        +cards
+        +'<div class="qtr-sum">'
+        +'<div class="qtr-sum-lbl">'+q.lbl+' Total</div>'
+        +'<div class="qtr-sum-val">'+fUsd(qRev)+'</div>'
+        +'<div class="qtr-sum-sub">'+f0(qSen)+' sensors</div>'
+        +qNw
+        +'</div></div></div></div>';
+    }).join('');
+
+    const fyNs=fyNewPct>0?('<span style="color:var(--muted);">·</span><span style="font-family:var(--mono);font-size:11px;color:#92400e;font-weight:600;">+New: '+fUsd(fyNewR)+' ('+fyNewPct.toFixed(1)+'%)</span>'):'';
+    return '<div style="margin-bottom:20px;">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 12px;background:white;border:1px solid var(--border);border-radius:8px;box-shadow:var(--sh);">'
+      +'<span style="background:var(--accent);color:white;border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;">'+yr+'</span>'
+      +'<span style="font-size:11px;font-weight:700;">Annual Total:</span>'
+      +'<span style="font-family:var(--mono);font-weight:700;font-size:14px;">'+fUsd(fyR)+'</span>'
+      +'<span style="color:var(--muted);">·</span>'
+      +'<span style="font-family:var(--mono);font-size:12px;color:var(--muted)">'+f0(fyS)+' sensors</span>'
+      +fyNs+'</div>'
+      +'<div style="overflow-x:auto;padding-bottom:4px;">'
+      +'<div style="display:flex;align-items:flex-start;gap:0;min-width:fit-content;">'+qBlocks+'</div>'
+      +'</div></div>';
+  }
+  const sortedYrs=[...activeYears].sort((a,b)=>a-b);
+  document.getElementById('monthly-section').innerHTML=sortedYrs.map(yr=>buildYear(yr,YEARS.indexOf(yr)*12)).join('');
+}
+
+// ════════ CHART ════════
+function lighten(hex,t){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgb(${Math.round(r+(255-r)*t)},${Math.round(g+(255-g)*t)},${Math.round(b+(255-b)*t)})`;
+}
+
+function renderChart(){
+  if(!computed) return;
+  const svg=document.getElementById('chart-svg');
+  const selYrs=[...activeYears].sort((a,b)=>a-b);
+  const CS=YEARS.indexOf(selYrs[0])*12;
+  const CE=YEARS.indexOf(selYrs[selYrs.length-1])*12+11;
+  const CL=CE-CS+1;
+
+  const prodData=[];
+  PRODS.forEach(p=>{
+    if(!chartFilter.has(p.id)) return;
+    const layers=computed[p.id];
+    const base=(chartView==='sen'?layers[0].sensor:layers[0].rev).slice(CS,CE+1);
+    const newI=new Array(CL).fill(0);
+    for(let li=1;li<layers.length;li++){
+      (chartView==='sen'?layers[li].sensor:layers[li].rev).slice(CS,CE+1).forEach((v,i)=>newI[i]+=v);
+    }
+    prodData.push({p,base,newI});
+  });
+  if(!prodData.length){svg.innerHTML='';return;}
+
+  const totalByMonth=Array.from({length:CL},(_,mi)=>prodData.reduce((s,d)=>s+d.base[mi]+d.newI[mi],0));
+  // Global max from full 60-month computed data keeps Y-scale stable across year views
+  const globalMax=prodData.reduce((gmax,{p})=>{
+    const layers=computed[p.id];
+    for(let mi=0;mi<N;mi++){
+      const v=(chartView==='sen'?layers[0].sensor:layers[0].rev)[mi]
+        +layers.slice(1).reduce((s,l)=>s+(chartView==='sen'?l.sensor:l.rev)[mi],0);
+      gmax=Math.max(gmax,v);
+    }
+    return gmax;
+  },1);
+  const visMax=Math.max(...totalByMonth,1);
+  // Use global scale unless visible window is much smaller (avoids tiny chart when zoomed to early years)
+  const maxV=globalMax>visMax*2?visMax*1.1:globalMax;
+  const minV=0;
+  const W=1100,H=320,P={t:24,r:20,b:40,l:86};
+  const cW=W-P.l-P.r,cH=H-P.t-P.b;
+  const xOf=mi=>P.l+(CL>1?mi*(cW/(CL-1)):cW/2);
+  const yOf=v=>P.t+cH-(v/maxV)*cH;
+  const yBottom=yOf(0);
+  const fmtAx=v=>chartView==='sen'?(v>=1000?(v/1000).toFixed(1)+'K':Math.round(v)+''):fUsd(v);
+
+  const stackBot=new Array(CL).fill(0);
+  const allLayers=[];
+
+  function lpath(pts){return pts.map((p,i)=>(i===0?`M${p[0].toFixed(1)},${p[1].toFixed(1)}`:`L${p[0].toFixed(1)},${p[1].toFixed(1)}`)).join(' ');}
+  function mspline(pts){
+    const n=pts.length; if(n<2) return lpath(pts);
+    const dx=[],dy=[],sl=[];
+    for(let i=0;i<n-1;i++){dx.push(pts[i+1][0]-pts[i][0]);dy.push(pts[i+1][1]-pts[i][1]);}
+    for(let i=0;i<n-1;i++) sl.push(dy[i]/dx[i]);
+    const tg=[sl[0]];
+    for(let i=1;i<n-1;i++) tg.push(sl[i-1]*sl[i]<=0?0:(sl[i-1]+sl[i])/2);
+    tg.push(sl[n-2]);
+    for(let i=0;i<n-1;i++){
+      if(Math.abs(sl[i])<1e-9){tg[i]=0;tg[i+1]=0;}
+      else{const a=tg[i]/sl[i],b=tg[i+1]/sl[i];if(a<0)tg[i]=0;if(b<0)tg[i+1]=0;const s=a*a+b*b;if(s>9){const k=3/Math.sqrt(s);tg[i]=k*a*sl[i];tg[i+1]=k*b*sl[i];}}
+    }
+    let d=`M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+    for(let i=0;i<n-1;i++){const h=dx[i];d+=` C${(pts[i][0]+h/3*tg[i]).toFixed(1)},${(pts[i][1]+h/3*tg[i]).toFixed(1)} ${(pts[i+1][0]-h/3*tg[i+1]).toFixed(1)},${(pts[i+1][1]-h/3*tg[i+1]).toFixed(1)} ${pts[i+1][0].toFixed(1)},${pts[i+1][1].toFixed(1)}`;}
+    return d;
+  }
+
+  let o=`<defs>`;
+  let di=0;
+  const defMap={};
+  prodData.forEach(({p})=>{
+    o+=`<linearGradient id="gb${di}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${p.color}" stop-opacity=".90"/><stop offset="100%" stop-color="${p.color}" stop-opacity=".65"/></linearGradient>`;
+    const lc=lighten(p.color,.38);
+    o+=`<linearGradient id="gn${di}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${lc}" stop-opacity=".88"/><stop offset="100%" stop-color="${lc}" stop-opacity=".50"/></linearGradient>`;
+    defMap[p.id]=di++;
+  });
+  o+=`</defs><rect width="${W}" height="${H}" fill="#fafbfc"/>`;
+
+  // Y grid
+  for(let t=0;t<=5;t++){const v=minV+(maxV-minV)*t/5,y=yOf(v);o+=`<line x1="${P.l}" y1="${y}" x2="${W-P.r}" y2="${y}" stroke="#e2e6f0" stroke-width="1"/><text x="${P.l-5}" y="${y+4}" text-anchor="end" font-size="10" fill="#8892ac" font-family="DM Mono,monospace">${fmtAx(v)}</text>`;}
+
+  // Year separators at Jan of each new year
+  YEARS.slice(1).forEach((yr,i)=>{
+    const xSep=xOf((i+1)*12);
+    o+=`<line x1="${xSep}" y1="${P.t}" x2="${xSep}" y2="${H-P.b}" stroke="#3b5bdb" stroke-width="1" stroke-dasharray="4,3" opacity=".3"/>`;
+    o+=`<text x="${xSep+3}" y="${P.t+10}" text-anchor="start" font-size="9" fill="#3b5bdb" font-family="DM Mono,monospace" opacity=".6">${yr}</text>`;
+  });
+
+  // ── DRAW: Total filled area + Base divider line ──
+  // Each product: draw (base+newI) as one filled shape, then Base top as interior line.
+  // This makes New Install = area between base line and total top — always correct shape.
+  prodData.forEach(({p,base,newI})=>{
+    const d=defMap[p.id];
+    const lc=lighten(p.color,.38);
+    const hasNew=newI.some(v=>v>0);
+
+    const botL =Array.from({length:CL},(_,mi)=>[xOf(mi), yBottom]);
+    const baseL=Array.from({length:CL},(_,mi)=>[xOf(mi), yOf(stackBot[mi]+base[mi])]);
+    const totL =Array.from({length:CL},(_,mi)=>[xOf(mi), yOf(stackBot[mi]+base[mi]+newI[mi])]);
+
+    // Closed band: top edge L→R, bottom edge R→L
+    function band(top,bot){
+      const rev=[...bot].reverse();
+      const d0=lpath(top);
+      const d1=lpath(rev).replace(/^M/,'L');
+      return d0+' '+d1+' Z';
+    }
+
+    if(hasNew){
+      o+=`<path d="${band(totL,baseL)}" fill="url(#gn${d})" stroke="none" opacity=".85"/>`;
+      o+=`<path d="${band(baseL,botL)}" fill="url(#gb${d})" stroke="${p.color}" stroke-width=".5" stroke-opacity=".3"/>`;
+      o+=`<path d="${lpath(baseL)}" fill="none" stroke="${p.color}" stroke-width="1.2" stroke-opacity=".4" stroke-dasharray="3,2"/>`;
+      allLayers.push({label:`${p.name} · Base`,color:p.color,opacity:.9,isBase:true,vals:base});
+      allLayers.push({label:`${p.name} · New Install`,color:lc,opacity:.78,isBase:false,vals:newI});
+    } else {
+      o+=`<path d="${band(baseL,botL)}" fill="url(#gb${d})" stroke="${p.color}" stroke-width=".5" stroke-opacity=".3"/>`;
+      allLayers.push({label:`${p.name} · Base`,color:p.color,opacity:.9,isBase:true,vals:base});
+    }
+
+    base.forEach((v,mi)=>stackBot[mi]+=v);
+    newI.forEach((v,mi)=>stackBot[mi]+=v);
+  });
+
+  // X labels for visible range
+  const xStep=CL<=12?1:CL<=24?2:3;
+  for(let ci=0;ci<CL;ci+=xStep){
+    const ai=CS+ci,yrL=String(2026+Math.floor(ai/12)).slice(2);
+    o+=`<text x="${xOf(ci)}" y="${H-P.b+13}" text-anchor="middle" font-size="9.5" fill="#6b7394" font-family="DM Mono,monospace">${MO[ai%12]}'${yrL}</text>`;
+  }
+  {const ci=CL-1,ai=CS+ci,yrL=String(2026+Math.floor(ai/12)).slice(2);
+   o+=`<text x="${xOf(ci)}" y="${H-P.b+13}" text-anchor="middle" font-size="9.5" fill="#6b7394" font-family="DM Mono,monospace">${MO[ai%12]}'${yrL}</text>`;}
+
+  // Year separators for selected range only
+  selYrs.slice(1).forEach(yr=>{
+    const ci=(YEARS.indexOf(yr)*12)-CS;
+    if(ci>0&&ci<CL){
+      const xSep=xOf(ci);
+      o+=`<line x1="${xSep}" y1="${P.t}" x2="${xSep}" y2="${H-P.b}" stroke="#3b5bdb" stroke-width="1" stroke-dasharray="4,3" opacity=".3"/>`;
+      o+=`<text x="${xSep+3}" y="${P.t+10}" text-anchor="start" font-size="9" fill="#3b5bdb" font-family="DM Mono,monospace" opacity=".6">${yr}</text>`;
+    }
+  });
+
+  // Quarterly shading for visible range
+  for(let q=0,nq=Math.ceil(CL/3);q<nq;q++){
+    if(q%2===1){
+      const x1=xOf(q*3),x2=xOf(Math.min(q*3+3,CL-1));
+      o+=`<rect x="${x1}" y="${P.t}" width="${x2-x1}" height="${cH}" fill="rgba(0,0,0,.012)"/>`;
+    }
+  }
+
+  o+=`<line id="cvl" x1="0" y1="${P.t}" x2="0" y2="${H-P.b}" stroke="#14172a" stroke-width="1" stroke-dasharray="3,3" opacity="0" pointer-events="none"/>`;
+  allLayers.forEach((_,li)=>o+=`<circle id="hd${li}" cx="0" cy="0" r="3.5" fill="${allLayers[li].color}" stroke="white" stroke-width="1.5" opacity="0" pointer-events="none"/>`);
+  o+=`<rect x="${P.l}" y="${P.t}" width="${cW}" height="${cH}" fill="transparent" onmousemove="onMv(event)" onmouseleave="hideTt()" ontouchmove="onTch(event)" ontouchend="hideTt()"/>`;
+  svg.innerHTML=o;
+
+  const cl2=allLayers[0]?.vals.length||CL;
+  const bot2=new Array(cl2).fill(0);
+  const stkTt=allLayers.map(l=>{
+    const row=Array.from({length:cl2},(_,mi)=>({lo:bot2[mi],hi:bot2[mi]+(l.vals[mi]||0)}));
+    l.vals.forEach((v,mi)=>bot2[mi]+=v);
+    return row;
+  });
+  svg._m={stk:stkTt,layers:allLayers,vals:allLayers.map(l=>l.vals),xOf,yOf,P,W,H,maxV,cW,cH,CS};
+
+  document.getElementById('chart-leg').innerHTML=allLayers.map(l=>{
+    const mk=l.isBase?`<span style="font-size:9px;background:#f0fdf4;color:#2b8a3e;border-radius:3px;padding:1px 4px;font-family:var(--mono);font-weight:700;">BASE</span>`:`<span style="font-size:9px;background:#eff6ff;color:#1864ab;border-radius:3px;padding:1px 4px;font-family:var(--mono);font-weight:700;">+NEW</span>`;
+    return `<div class="li"><span class="ls" style="background:${l.color};opacity:${l.opacity}"></span>${mk} ${l.label}</div>`;
+  }).join('');
+}
+
+// ════════ TOOLTIP ════════
+function onMv(e){
+  const svg=document.getElementById('chart-svg');
+  const m=svg._m; if(!m) return;
+  const rect=svg.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)*(1100/rect.width);
+  let near=0,minD=1e9;
+  const clen=m.stk[0]?.length||60;
+  for(let i=0;i<clen;i++){const d=Math.abs(m.xOf(i)-mx);if(d<minD){minD=d;near=i;}}
+  const cl=document.getElementById('cvl');
+  if(cl){cl.setAttribute('x1',m.xOf(near));cl.setAttribute('x2',m.xOf(near));cl.setAttribute('opacity','.35');}
+  m.layers.forEach((_,li)=>{const d=document.getElementById(`hd${li}`);if(d){d.setAttribute('cx',m.xOf(near));d.setAttribute('cy',m.yOf(m.stk[li][near].hi));d.setAttribute('opacity','1');}});
+  const tt=document.getElementById('ctt');
+  const cont=tt.parentElement;
+  const cRect=cont.getBoundingClientRect();
+  const svgRect=svg.getBoundingClientRect();
+  const fv=v=>chartView==='sen'?Math.round(v).toLocaleString()+' ea':fUsd(v);
+  const total=m.stk[m.stk.length-1][near].hi;
+  const absN=(m.CS||0)+near;
+  const yr=String(2026+Math.floor(absN/12));
+  let html=`<div style="font-weight:700;font-size:12px;margin-bottom:6px">${MO[absN%12]} ${yr}</div>`;
+  [...m.layers].reverse().forEach((l,rli)=>{
+    const li=m.layers.length-1-rli;
+    const v=m.vals[li][near]; if(!v) return;
+    const mk=l.isBase?`<span style="font-size:8px;background:#f0fdf4;color:#2b8a3e;border-radius:2px;padding:0 3px;font-weight:700;">BASE</span>`:`<span style="font-size:8px;background:#eff6ff;color:#1864ab;border-radius:2px;padding:0 3px;font-weight:700;">+NEW</span>`;
+    html+=`<div style="display:flex;justify-content:space-between;gap:12px;padding:2px 0;"><span style="display:flex;align-items:center;gap:4px;color:var(--text2);"><span style="width:7px;height:7px;border-radius:2px;background:${l.color};display:inline-block;flex-shrink:0"></span>${mk} ${l.label}</span><span style="font-weight:600;white-space:nowrap">${fv(v)}</span></div>`;
+  });
+  html+=`<div style="border-top:1px solid var(--border);margin-top:5px;padding-top:5px;display:flex;justify-content:space-between;font-weight:700;"><span>Total</span><span style="color:var(--accent)">${fv(total)}</span></div>`;
+  tt.innerHTML=html; tt.style.display='block';
+  const sc=svgRect.width/1100;
+  const xS=m.xOf(near)*sc+(svgRect.left-cRect.left);
+  let left=xS+12; if(left+220>cRect.width) left=xS-228;
+  tt.style.left=left+'px'; tt.style.top='10px';
+}
+function onTch(e){
+  if(e.touches&&e.touches.length>0){
+    e.preventDefault();
+    onMv(e.touches[0]);
+  }
+}
+function hideTt(){
+  document.getElementById('ctt').style.display='none';
+  const cl=document.getElementById('cvl'); if(cl) cl.setAttribute('opacity','0');
+  document.querySelectorAll('[id^="hd"]').forEach(d=>d.setAttribute('opacity','0'));
+}
+
+// ════════ DETAIL TABLE ════════
+function renderDetailTable(){
+  if(!computed) return;
+  const head=document.getElementById('dtbl-head');
+  const body=document.getElementById('dtbl-body');
+  const wrapper=document.querySelector('.dtbl-wrap');
+  if(!wrapper) return;
+
+  // Build one table per year
+  function buildYearTable(yr,offset){
+    const allSen=new Array(12).fill(0),allRev=new Array(12).fill(0);
+    const allUnits=new Array(12).fill(0);
+    let rows='';
+    PRODS.forEach(p=>{
+      const layers=computed[p.id];
+      const tS=new Array(12).fill(0),tR=new Array(12).fill(0);
+      const tU=new Array(12).fill(0);
+      layers.forEach(l=>{for(let i=0;i<12;i++){tS[i]+=l.sensor[offset+i]||0;tR[i]+=l.rev[offset+i]||0;}});
+      if(computed[p.id]._units) for(let i=0;i<12;i++) tU[i]=computed[p.id]._units[offset+i]||0;
+      for(let i=0;i<12;i++){allSen[i]+=tS[i];allRev[i]+=tR[i];allUnits[i]+=tU[i];}
+      const fyS=tS.reduce((a,b)=>a+b,0),fyR=tR.reduce((a,b)=>a+b,0);
+      const fyU=tU.reduce((a,b)=>a+b,0)/12; // avg units over year
+      const tY=tS.map((s,i)=>tU[i]>0?s/tU[i]:0);
+      const fyY=fyU>0?fyS/12/fyU:0; // annual avg yield
+      rows+=`<tr class="sec-head"><td colspan="14" style="color:${p.color}">${p.name}</td></tr>`;
+      rows+='<tr><td style="padding-left:12px">Sensor Qty</td>'+tS.map(v=>'<td style="color:#166534">'+f0(v)+'</td>').join('')+'<td style="color:#14532d;font-weight:700;background:#f0fdf4">'+f0(fyS)+'</td></tr>';
+      rows+='<tr><td style="padding-left:12px">Yield / Unit</td>'+tY.map(v=>'<td style="color:#7c5c00">'+( v>0?v.toFixed(1):'—')+'</td>').join('')+'<td style="color:#7c5c00;font-weight:700;background:#fffbeb">'+(fyY>0?fyY.toFixed(1):'—')+'</td></tr>';
+      rows+='<tr><td style="padding-left:12px">Revenue</td>'+tR.map(v=>'<td style="color:#1e3a8a">'+fUsd(v)+'</td>').join('')+'<td style="color:#1e3a8a;font-weight:700;background:#eff6ff">'+fUsd(fyR)+'</td></tr>';
+    });
+    const aFyS=allSen.reduce((a,b)=>a+b,0),aFyR=allRev.reduce((a,b)=>a+b,0);
+    const aFyU=allUnits.reduce((a,b)=>a+b,0)/12;
+    const totY=allSen.map((s,i)=>allUnits[i]>0?s/allUnits[i]:0);
+    const aFyY=aFyU>0?aFyS/12/aFyU:0;
+    rows+='<tr class="foot"><td>Total Sensors</td>'+allSen.map(v=>'<td>'+f0(v)+'</td>').join('')+'<td>'+f0(aFyS)+'</td></tr>';
+    rows+='<tr class="foot"><td>Avg Yield / Unit</td>'+totY.map(v=>'<td>'+(v>0?v.toFixed(1):'—')+'</td>').join('')+'<td>'+(aFyY>0?aFyY.toFixed(1):'—')+'</td></tr>';
+    rows+='<tr class="foot"><td>Total Revenue</td>'+allRev.map(v=>'<td>'+fUsd(v)+'</td>').join('')+'<td>'+fUsd(aFyR)+'</td></tr>';
+    return '<div style="font-size:12px;font-weight:700;color:var(--text2);margin:16px 0 8px;padding:6px 10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--accent);">📅 '+yr+' Annual Detail</div>'
+      +'<div style="overflow-x:auto;"><table class="dtbl">'
+      +'<thead><tr><th>Item</th>'+MO.map(m=>'<th>'+m+'</th>').join('')+'<th>Annual</th></tr></thead>'
+      +'<tbody>'+rows+'</tbody></table></div>';
+  }
+  wrapper.innerHTML=YEARS.map((yr,i)=>buildYearTable(yr,i*12)).join('');
+}
+
+// ════════ VIEW / FILTER / NAV ════════
+function setView(v){
+  chartView=v;
+  document.getElementById('vb-rev').classList.toggle('active',v==='rev');
+  document.getElementById('vb-sen').classList.toggle('active',v==='sen');
+  renderChart();
+}
+function togglePF(pid,event){
+  const isCtrl=event&&(event.ctrlKey||event.metaKey);
+  if(!isCtrl){
+    if(chartFilter.size===1&&chartFilter.has(pid)){PRODS.forEach(p=>chartFilter.add(p.id));}
+    else{chartFilter.clear();chartFilter.add(pid);}
+  } else {
+    if(chartFilter.has(pid)){if(chartFilter.size===1)return;chartFilter.delete(pid);}
+    else chartFilter.add(pid);
+  }
+  PRODS.forEach(p=>{const b=document.getElementById(`pf-${p.id}`);if(!b)return;b.classList.toggle('active',chartFilter.has(p.id));b.style.opacity=chartFilter.has(p.id)?'1':'.3';b.style.background=chartFilter.has(p.id)?'white':'var(--bg)';});
+  syncBannerHighlight();
+  renderMonthlySection();
+  renderChart();
+}
+function syncBannerHighlight(){
+  if(!computed) return;
+  const allSel=chartFilter.size===PRODS.length;
+  PRODS.forEach(p=>{
+    const card=document.getElementById('gbc-'+p.id);
+    if(!card) return;
+    const on=chartFilter.has(p.id);
+    card.style.opacity=allSel?'1':(on?'1':'0.3');
+    card.style.boxShadow=(!allSel&&on)?'0 0 0 2.5px '+p.color:'';
+  });
+  const tot=document.getElementById('gbc-total');
+  if(tot) tot.style.opacity=allSel?'1':'0.5';
+}
+function switchProd(pid){
+  activeProd=pid;
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.toggle('active',t.dataset.p===pid));
+  document.querySelectorAll('.ppanel').forEach(el=>el.classList.toggle('active',el.id===`panel-${pid}`));
+}
+
+// ════════ URL STATE SHARE ════════
+function getState(){
+  const state={};
+  PRODS.forEach(p=>{
+    state[p.id]={
+      ci: S[p.id].curInstall,
+      cy: S[p.id].curYield,
+      yg: S[p.id].yieldGrowth,
+      asp: S[p.id].asp,
+      plans: S[p.id].plans.map(pl=>({sm:pl.startMonth, inst:pl.install, my:pl.manualYield}))
+    };
+  });
+  return state;
+}
+
+function syncInputsFromState(){
+  PRODS.forEach(p=>{
+    const ci=document.getElementById(`${p.id}-ci`);
+    const cy=document.getElementById(`${p.id}-cy`);
+    const yg=document.getElementById(`${p.id}-yg`);
+    if(ci) ci.value=S[p.id].curInstall;
+    if(cy) cy.value=S[p.id].curYield;
+    if(yg) yg.value=S[p.id].yieldGrowth;
+    renderPlans(p.id);
+  });
+  renderAspInputs();
+}
+
+function _mkAlias(){
+  const n=new Date(),p=x=>String(x).padStart(2,'0');
+  return n.getFullYear()+p(n.getMonth()+1)+p(n.getDate())+'_'+p(n.getHours())+':'+p(n.getMinutes());
+}
+function copyStateCode(){
+  // Sync current inputs first
+  PRODS.forEach(p=>{
+    const ci=document.getElementById(`${p.id}-ci`);
+    const cy=document.getElementById(`${p.id}-cy`);
+    const yg=document.getElementById(`${p.id}-yg`);
+    if(ci) S[p.id].curInstall=+ci.value||0;
+    if(cy) S[p.id].curYield=+cy.value||0;
+    if(yg) S[p.id].yieldGrowth=+yg.value||0;
+  });
+  const code=btoa(unescape(encodeURIComponent(JSON.stringify(getState()))));
+  const alias=_mkAlias();
+  _ss.set(alias,code);
+  const payload=alias+'||'+code;
+
+  function showToast(msg){
+    const toast=document.getElementById('share-toast');
+    toast.textContent=msg;
+    toast.style.display='block';
+    setTimeout(()=>{toast.style.display='none';toast.textContent='✓ State code copied!';},3500);
+  }
+
+  // Try modern clipboard API first
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(payload)
+      .then(()=>showToast('✓ Copied: '+alias))
+      .catch(()=>fallbackCopy(payload,alias));
+  } else {
+    fallbackCopy(payload,alias);
+  }
+}
+
+function fallbackCopy(payload,alias){
+  // iOS Safari fallback: create a temporary textarea
+  const ta=document.createElement('textarea');
+  ta.value=payload;
+  ta.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px;';
+  document.body.appendChild(ta);
+  ta.focus();ta.select();
+  try{
+    const ok=document.execCommand('copy');
+    document.body.removeChild(ta);
+    const toast=document.getElementById('share-toast');
+    if(ok){
+      toast.textContent='✓ Copied: '+alias;
+      toast.style.display='block';
+      setTimeout(()=>{toast.style.display='none';toast.textContent='✓ State code copied!';},3500);
+    } else {
+      window.prompt('Copy this code and paste in your reply email:',payload);
+    }
+  }catch(e){
+    document.body.removeChild(ta);
+    window.prompt('Copy this code and paste in your reply email:',payload);
+  }
+}
+
+function loadPastedState(){
+  const raw=document.getElementById('paste-input').value.trim();
+  if(!raw){ alert('Please paste a state code first.'); return; }
+  try{
+    let b64=raw;
+    if(raw.includes('||')){
+      const pts=raw.split('||');
+      _ss.set(pts[0].trim(),pts[1].trim());
+      b64=pts[1].trim();
+    }
+    const state=JSON.parse(decodeURIComponent(escape(atob(b64))));
+    PRODS.forEach(p=>{
+      if(!state[p.id]) return;
+      const d=state[p.id];
+      S[p.id].curInstall = d.ci ?? S[p.id].curInstall;
+      S[p.id].curYield   = d.cy ?? S[p.id].curYield;
+      S[p.id].yieldGrowth= d.yg ?? 0;
+      if(d.asp) S[p.id].asp = d.asp;
+      S[p.id].plans = (d.plans||[]).map(pl=>({
+        startMonth: pl.sm, install: pl.inst, manualYield: pl.my
+      }));
+    });
+    syncInputsFromState();
+    document.getElementById('paste-bar').style.display='none';
+    document.getElementById('paste-input').value='';
+    setTimeout(()=>{ runCalc(); }, 100);
+  } catch(e){
+    alert('Invalid code. Please check and try again.');
+  }
+}
+
+// loadStateFromURL removed — using paste-based state sharing instead
+
+// ════════ CSV EXPORT ════════
+function exportCSV(){
+  if(!computed){ alert('Please calculate first.'); return; }
+  const rows=[];
+  // Header
+  const hdr=['Product','Type'].concat(YEARS.flatMap(yr=>MO.map(m=>`${m} ${yr}`))).concat(YEARS.map(yr=>`FY${yr} Total`));
+  rows.push(hdr);
+
+  PRODS.forEach(p=>{
+    const layers=computed[p.id];
+    const tSen=new Array(N).fill(0), tRev=new Array(N).fill(0);
+    const baseSen=new Array(N).fill(0), baseRev=new Array(N).fill(0);
+    const newSen=new Array(N).fill(0),  newRev=new Array(N).fill(0);
+    layers.forEach((l,li)=>{
+      l.sensor.forEach((v,i)=>tSen[i]+=v);
+      l.rev.forEach((v,i)=>tRev[i]+=v);
+      if(li===0){ l.sensor.forEach((v,i)=>baseSen[i]+=v); l.rev.forEach((v,i)=>baseRev[i]+=v); }
+      else { l.sensor.forEach((v,i)=>newSen[i]+=v); l.rev.forEach((v,i)=>newRev[i]+=v); }
+    });
+    const pUnits=computed[p.id]._units||new Array(N).fill(0);
+    const tYield=tSen.map((s,i)=>pUnits[i]>0?s/pUnits[i]:0);
+    const fyTots=arr=>YEARS.map((_,yi)=>arr.slice(yi*12,yi*12+12).reduce((a,b)=>a+b,0));
+    const fyYield=YEARS.map((_,yi)=>{
+      const s=tSen.slice(yi*12,yi*12+12).reduce((a,b)=>a+b,0);
+      const u=pUnits.slice(yi*12,yi*12+12).reduce((a,b)=>a+b,0)/12;
+      return u>0?s/12/u:0;
+    });
+
+    const fmtN=v=>Math.round(v);
+    const fmtR=v=>(v/1).toFixed(2); // USD
+    const fmtY=v=>v>0?v.toFixed(2):'0';
+
+    rows.push([p.name,'Sensor Qty (Total)',...tSen.map(fmtN),...fyTots(tSen).map(fmtN)]);
+    rows.push([p.name,'Yield / Unit (Eff.)',...tYield.map(fmtY),...fyYield.map(fmtY)]);
+    rows.push([p.name,'Revenue (Total)',...tRev.map(fmtR),...fyTots(tRev).map(fmtR)]);
+    rows.push([p.name,'Sensor Qty (Base)',...baseSen.map(fmtN),...fyTots(baseSen).map(fmtN)]);
+    rows.push([p.name,'Revenue (Base)',...baseRev.map(fmtR),...fyTots(baseRev).map(fmtR)]);
+    if(newSen.some(v=>v>0)){
+      rows.push([p.name,'Sensor Qty (New Install)',...newSen.map(fmtN),...fyTots(newSen).map(fmtN)]);
+      rows.push([p.name,'Revenue (New Install)',...newRev.map(fmtR),...fyTots(newRev).map(fmtR)]);
+    }
+    rows.push([]); // blank separator
+  });
+
+  // Grand total
+  const allSen=new Array(N).fill(0), allRev=new Array(N).fill(0);
+  PRODS.forEach(p=>{ computed[p.id].forEach(l=>{ l.sensor.forEach((v,i)=>allSen[i]+=v); l.rev.forEach((v,i)=>allRev[i]+=v); }); });
+  const fyTots=arr=>YEARS.map((_,yi)=>arr.slice(yi*12,yi*12+12).reduce((a,b)=>a+b,0));
+  rows.push(['ALL','Sensor Qty (Total)',...allSen.map(v=>Math.round(v)),...fyTots(allSen).map(v=>Math.round(v))]);
+  rows.push(['ALL','Revenue USD (Total)',...allRev.map(v=>v.toFixed(2)),...fyTots(allRev).map(v=>v.toFixed(2))]);
+
+  const csv=rows.map(r=>r.map(v=>{
+    const s=String(v);
+    return s.includes(',') ? `"${s}"` : s;
+  }).join(',')).join('\r\n');
+
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='revenue_forecast_5yr.csv';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+// ════════ INIT ════════
+buildUI();
+PRODS.forEach(p=>renderPlans(p.id));
+</script>
+</body>
+</html>
